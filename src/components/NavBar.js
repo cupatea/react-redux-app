@@ -11,7 +11,8 @@ import ShoppingCartIcon from 'material-ui-icons/ShoppingCart'
 
 const styles = theme => ({
   root: {
-    width: '100%'
+    width: '100%',
+    paddingBottom: '10px',
   },
   appBar:{
     position: 'static',

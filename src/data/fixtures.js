@@ -1,12 +1,19 @@
+import bra from './images/bra.jpg'
+import panties from './images/panties.jpg'
+import bodySuite from './images/bodySuit.jpg'
+
 export const appName = "Ari Dar Lingerie"
 export const categories = [
   {
-    'label': 'Bra',
+    'title': 'Bra',
+    'image': bra,
   },
   {
-    'label': 'Panties',
+    'title': 'Panties',
+    'image': panties,
   },
   {
-    'label' : 'Body suite'
+    'title': 'Body suite',
+    'image': bodySuite,
   },
 ]

@@ -16,6 +16,7 @@ const styles = theme => ({
   tab: {
     textTransform: 'none',
     height: '35px',
+    opacity: 1,
   },
 })
 
@@ -37,7 +38,7 @@ class NavTabs extends React.Component {
           onChange={this.handleChange}
           centered
         >
-          {this.props.tabs.map( tab => <Tab className={classes.tab} label={tab.label} />)}
+          {this.props.tabs.map( tab => <Tab className={classes.tab} label={tab.title} />)}
         </Tabs>
       </Paper>
     )

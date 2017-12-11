@@ -7,7 +7,8 @@ import Typography from 'material-ui/Typography'
 
 const styles = theme => ({
   root: {
-    display: 'grid'
+    display: 'grid',
+    width: '100%'
   },
   card: {
     display: 'grid',
@@ -21,7 +22,7 @@ const styles = theme => ({
   },
   content:{
     display: 'grid',
-    margin: '32px 0px',
+    marginTop: '24px',
     padding: 0,
   },
   title: {
@@ -31,12 +32,13 @@ const styles = theme => ({
   },
   price:{
     justifySelf: 'center',
+    marginBottom: '24px',
     fontSize: '13px',
     fontWeight: 400,
   }
 })
 
-function ProductItem(props) {
+const Product = props => {
   const { classes } = props
   return (
     <div className={classes.root}>
@@ -54,6 +56,7 @@ function ProductItem(props) {
           >
             {props.title}
           </Typography>
+        </CardContent>
           <Typography
             className={classes.price}
             type="title"
@@ -61,14 +64,16 @@ function ProductItem(props) {
           >
             ₴{props.price}
           </Typography>
-        </CardContent>
       </Card>
     </div>
   )
 }
 
-ProductItem.propTypes = {
+Product.propTypes = {
   classes: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
 }
 
-export default withStyles(styles)(ProductItem)
+export default withStyles(styles)(Product)

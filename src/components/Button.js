@@ -17,9 +17,9 @@ const styles = theme => ({
   },
 })
 
-function Button(props) {
+const Button = props =>{
   const { classes } = props
-  return <MaterialButton color="contrast" className={classes.root}>{props.text} </MaterialButton>
+  return <MaterialButton color='contrast' className={classes.root}>{props.text} </MaterialButton>
 }
 
 Button.propTypes = {

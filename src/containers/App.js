@@ -9,11 +9,16 @@ import Categories from './Categories'
 import Products from './Products'
 
 class App extends Component {
+  ScrollToTop() {
+    window.scrollTo(0, 0)
+    return null
+  }  
 
   render() {
     const currentTabSlug = this.props.location.pathname.split('/')[1]
     return(
       <div>
+        <Route component = { this.ScrollToTop } />
         <Header appName = { appName } />
         <Tabs tabs = { categories } currentTab = { currentTabSlug } />
         <Switch>

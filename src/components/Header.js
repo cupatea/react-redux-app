@@ -50,7 +50,7 @@ const Header = props => {
     <div className={classes.root}>
       <AppBar className={classes.appBar}>
         <Toolbar className = {classes.toolBar}>
-          <IconButton className={classes.navButton} aria-label="Menu">
+          <IconButton className={classes.navButton} aria-label="Menu" onClick = { props.open(true) }>
             <MenuIcon />
           </IconButton>
             <Link to='/' className={classes.link}>

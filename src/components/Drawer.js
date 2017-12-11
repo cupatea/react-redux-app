@@ -47,6 +47,13 @@ const Drawer = props => {
 
 Drawer.propTypes = {
   classes: PropTypes.object.isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    slug: PropTypes.string,
+    title: PropTypes.string,
+  })),
+  close: PropTypes.func.isRequired,
+  title: PropTypes.string
 }
 
 export default withStyles(styles)(Drawer)

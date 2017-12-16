@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 import Paper from 'material-ui/Paper'
 import MaterailTabs, { Tab } from 'material-ui/Tabs'
+import Hidden from 'material-ui/Hidden'
 
 const styles = theme => ({
   root: {
@@ -24,25 +25,28 @@ const Tabs = props => {
   const { classes } = props
   const currentTab = props.currentTab ? props.currentTab : false
   return (
-    <Paper className = { classes.root }>
-      <MaterailTabs className = { props.classes.tabs} value = { currentTab } >
-        {props.tabs.map(tab => 
-          <Tab 
-            className = { classes.tab } 
-            key       = { tab.id }
-            value     = { tab.slug }
-            label     = { tab.title } 
-            component = { Link }
-            to        = { tab.slug }
-          />
-        )}
-      </MaterailTabs>
-    </Paper>
+    <Hidden only = 'xs'>
+      <Paper className = { classes.root }>
+        <MaterailTabs className = { props.classes.tabs} value = { currentTab } >
+          {props.tabs.map(tab => 
+            <Tab 
+              className = { classes.tab } 
+              key       = { tab.id }
+              value     = { tab.slug }
+              label     = { tab.title } 
+              component = { Link }
+              to        = { tab.slug }
+            />
+          )}
+        </MaterailTabs>
+      </Paper>
+    </Hidden>
   )
 }
 
 Tabs.propTypes = {
   classes: PropTypes.object.isRequired,
+  lang: PropTypes.string.isRequired,
   currentTab: PropTypes.string.isRequired,
   tabs: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,

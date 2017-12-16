@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { withStyles } from 'material-ui/styles'
 import { withRouter } from 'react-router-dom'
 import Grid from 'material-ui/Grid'
-
+import PropTypes from 'prop-types'
 import Category from '../components/Category'
 import Product from '../components/Product'
 
-import PropTypes from 'prop-types'
+
 
 import { categories, products } from '../data/fixtures'
 
@@ -23,12 +23,11 @@ const styles = theme => ({
 class Products extends Component {
   render(){
     const { classes } = this.props
-    const currentCategory = categories.find(c => '/' + c.slug === this.props.location.pathname)
+    const currentCategory = categories.find(c => c.slug === this.props.match.params.slug)
     const list = products
       .filter(p => p.category_id === currentCategory.id)
       .map(p =>
       <Grid key = { p.id } className = { classes.container } item xs = { 12 } sm = { 6 } md = { 4 } lg = { 4 }>
-        { }
         <Product
           title = { p.title }
           image = { p.image }

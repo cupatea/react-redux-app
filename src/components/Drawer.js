@@ -1,59 +1,40 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import { withStyles } from 'material-ui/styles'
 import MaterialDrawer from 'material-ui/Drawer'
-import List, { ListItem, ListItemText } from 'material-ui/List'
+import List from './List'
 
-const styles = {
-  list: {
-    width: 250,
-  },
-  link:{
-    textDecoration: 'none',
-  },
-}
 const Drawer = props => {
-  const { classes } = props
-  const items = props.items.map(i => (
-     <ListItem key = { i.id }>
-      <Link className = { classes.link } to = { i.slug }>
-        <ListItemText secondary = { i.title }/>   
-      </Link>  
-    </ListItem>
-  ))
   return (
     <MaterialDrawer 
       open = { props.isOpen } 
-      onRequestClose = { props.close(false) }
+      onRequestClose = { props.closeDrawer(false) }
     >
-    <div
-      tabIndex = { 0 }
-      role = 'button'
-      onClick   = { props.close(false) }
-      onKeyDown = { props.close(false) }
-    >
-       
-      <List className = { classes.list }>
-        <ListItem>
-          <ListItemText primary = { props.title }/>  
-        </ListItem>  
-        { items }
-      </List>
-    </div>  
+      <div
+        tabIndex = { 0 }
+        role = 'button'
+        onClick   = { props.closeDrawer(false) }
+        onKeyDown = { props.closeDrawer(false) }
+      >  
+        { props.content.map((list, index) =>
+            <List 
+              key = { index } 
+              headline = { list.headline } 
+              items = { list.items }
+            />  
+          )
+        }
+      </div>  
     </MaterialDrawer>
   )  
 }  
 
 Drawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  items: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    slug: PropTypes.string,
-    title: PropTypes.string,
+  content: PropTypes.arrayOf(PropTypes.shape({
+    headline: PropTypes.string,
+    items: PropTypes.array,
   })),
-  close: PropTypes.func.isRequired,
+  closeDrawer: PropTypes.func.isRequired,
   title: PropTypes.string
 }
 
-export default withStyles(styles)(Drawer)
+export default Drawer

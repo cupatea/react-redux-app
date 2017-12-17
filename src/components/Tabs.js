@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 import Paper from 'material-ui/Paper'
 import MaterailTabs, { Tab } from 'material-ui/Tabs'
@@ -34,8 +33,7 @@ const Tabs = props => {
               key       = { tab.id }
               value     = { tab.slug }
               label     = { tab.title } 
-              component = { Link }
-              to        = { tab.slug }
+              onClick   = { (slag) => props.action(tab.slug)}
             />
           )}
         </MaterailTabs>
@@ -46,7 +44,6 @@ const Tabs = props => {
 
 Tabs.propTypes = {
   classes: PropTypes.object.isRequired,
-  lang: PropTypes.string.isRequired,
   currentTab: PropTypes.string.isRequired,
   tabs: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,

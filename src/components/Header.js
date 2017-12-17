@@ -127,7 +127,11 @@ const Header = props => {
                 { props.appName }
               </Typography>
             </Link> 
-          <IconButton className = { classes.navButton } aria-label = "ShoppingCart">
+          <IconButton 
+            onClick = { props.incrementCounter }
+            className = { classes.navButton } 
+            aria-label = "ShoppingCart"
+          >
             { cartIcon }
           </IconButton>
         </Toolbar>

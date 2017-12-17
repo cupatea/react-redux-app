@@ -1,20 +1,18 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import Category from '../components/Category'
 
-import { categories } from '../data/fixtures'
-
-
-
 class Categories extends Component{
-
   render(){
-    const list = categories.map(c =>
+    const list = this.props.categories.map(c =>
       <Category
-        key    = { c.id }
-        title  = { c.title} 
-        image  = { c.image} 
-        path   = { c.slug } 
-        button = "Shop Now" 
+        key     = { c.id }
+        title   = { c.title} 
+        image   = { c.image} 
+        path    = { c.slug } 
+        button  = "Shop Now" 
+        onClick = { window.scrollTo(0, 0) }
       />  
     )
     return (
@@ -25,4 +23,10 @@ class Categories extends Component{
   }  
 }
 
-export default Categories
+const mapStateToProps = state => {
+  return {
+    categories: state.categories,
+  }
+}
+
+export default connect(mapStateToProps)(Categories)

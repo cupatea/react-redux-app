@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Route, withRouter } from 'react-router-dom'
-import { appName, categories } from '../data/fixtures'
+import { connect } from 'react-redux'
+import { increment, selectLanguage }  from '../store/actions'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -10,38 +11,28 @@ import Categories from './Categories'
 import Products from './Products'
 
 class App extends Component {
-  state =  {
-    langList: ['en', 'ua', 'ru'],
-    currentLang: 'en',
+  state = {
+    locales: ['en', 'ua', 'ru'],
     isDrowerOpen: false,
     isLangMenuOpen: false,
-    cartCount: 1,
   }
-  ScrollToTop() {
-    window.scrollTo(0, 0)
-    return null
-  }  
-    
+
   toggleDrawer = (isOpen) => () => {
     this.setState({
       isDrowerOpen: isOpen,
     })
   }
-  handleLangMenuClick = () => {
+  handleLangMenuOpen = () => {
     this.setState({ isLangMenuOpen: true })
   }
 
-  handleLangMenuRequestClose = () => {
+  handleLangMenuClose = () => {
     this.setState({ isLangMenuOpen: false })
   }
-  handleLangMenuRequestSelect = (lang) => {
-    this.setState({ 
-      currentLang: lang,
-      isLangMenuOpen: false 
-    })
-  }
-  handleCategoryMenuRequestSelect = (slug) => {
-    this.props.history.push(slug)
+
+  handleCategoryChange = (slug) => {
+    this.props.history.push(`/${slug}`)
+    window.scrollTo(0, 0)  
   }
 
   render() {
@@ -49,21 +40,21 @@ class App extends Component {
     const drawerContent = [
       {
         headline: "Category",
-        items: categories.map(c => 
+        items: this.props.categories.map(c => 
           ({ 
             title: c.title, 
             path: c.slug, 
-            action: this.handleCategoryMenuRequestSelect 
+            action: this.handleCategoryChange 
           })
         )
       },
       {
         headline: 'Language',
-        items: this.state.langList.map(l => 
+        items: this.state.locales.map(l => 
           ({ 
             title: l.toUpperCase(), 
             path: l, 
-            action: this.handleLangMenuRequestSelect 
+            action: this.props.handleLocaleChange 
           })
         )
       },
@@ -71,15 +62,18 @@ class App extends Component {
     return(
       <div>
         <Header 
-          appName = { appName } 
+          incrementCounter = { this.props.increment }
           openDrawer = { this.toggleDrawer }
-          cartCount = { this.state.cartCount }
-          langList = { this.state.langList }
-          currentLang = { this.state.currentLang }
+          closeLangMenu = { this.handleLangMenuClose }
+          openLangMenu = { this.handleLangMenuOpen }
+          selectLang = { this.props.handleLocaleChange }
+
+          appName = { this.props.appName } 
+          cartCount = { this.props.cartCount }
+          langList = { this.state.locales }
+          currentLang = { this.props.currentLang }
           isLangMenuOpen = { this.state.isLangMenuOpen }
-          closeLangMenu = { this.handleLangMenuRequestClose }
-          openLangMenu = { this.handleLangMenuClick }
-          selectLang = { this.handleLangMenuRequestSelect }
+        
         />
         <Drawer 
           content = { drawerContent }
@@ -87,17 +81,35 @@ class App extends Component {
           closeDrawer = {this.toggleDrawer} 
         />
         <Tabs 
-          tabs = { categories } 
+          tabs = { this.props.categories } 
           currentTab = { currentTabSlug } 
+          action = { this.handleCategoryChange }
         />
         
-        <Route component = { this.ScrollToTop } />
         <Route exact path = {'/'}       component = { Categories }/>
-        <Route exact path = {`/:slug`} component = { Products } />]
+        <Route exact path = {`/:slug`} component = { Products } />
 
         <Footer text = 'Contacts' />
       </div>
     )
   }
 }  
-export default withRouter(App)
+
+const mapStateToProps = state => {
+  return {
+    appName: state.appName,
+    categories: state.categories,
+    currentLang: state.locale,
+    cartCount: state.cartCount,
+
+  }
+}
+
+const mapDispachToProps = dispatch => {
+  return {
+    increment: () => dispatch(increment()),
+    handleLocaleChange: (locale) => dispatch(selectLanguage(locale))
+  }
+}
+
+export default withRouter(connect(mapStateToProps,mapDispachToProps)(App))

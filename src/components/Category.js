@@ -41,7 +41,7 @@ const styles = theme => ({
     fontSize: '13px',
     fontWeight: 400,
   },
-  link:{
+  link: {    
     marginTop: '24px',
     display: 'grid',
     textDecoration: 'none',
@@ -51,24 +51,24 @@ const styles = theme => ({
 const Category = props => {
   const { classes } = props
   const info = <Typography className = {classes.info} component = "p" >{ `${props.info} items` }</Typography>
-  const button = <Link to = {props.path} className = {classes.link}><Button text = { props.button }/></Link>
+  const button = <Link to = { props.path } className = { classes.link }><Button text = { props.button }/></Link>
   return (
-    <div className={classes.root}>
-      <Card className={classes.card}>
-        <Link to={props.path} className={props.classes.link}>
+    <div className = { classes.root }>
+      <Card className = { classes.card }>
+        <Link to = { props.path } className = { props.classes.link }>
           <CardMedia
-            className={classes.media}
-            image={props.image}
-            title={props.title}
+            className = { classes.media }
+            image = { props.image }
+            title = { props.title }
           />
         </Link> 
-        <CardContent className={classes.content}>
+        <CardContent className = { classes.content }>
           <Typography
-            className={classes.title}
-            type="headline"
-            component="h4"
+            className = { classes.title }
+            type = "headline"
+            component = "h4"
           >
-              {props.title}
+              { props.title }
           </Typography>
           <CardActions className = { classes.panel }>
             { props.info && info }

@@ -17,13 +17,19 @@ const styles = theme => ({
   },
 })
 
-const Button = props =>{
-  const { classes } = props
-  return <MaterialButton color='contrast' className={classes.root}>{props.text} </MaterialButton>
-}
+const Button = props =>(
+  <MaterialButton 
+    className = { props.classes.root }
+    color = 'contrast' 
+    onClick = { props.click }
+  >
+    { props.text } 
+  </MaterialButton>
+)
 
 Button.propTypes = {
   classes: PropTypes.object.isRequired,
+  click: PropTypes.func
 }
 
 export default withStyles(styles)(Button)

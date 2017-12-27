@@ -1,0 +1,9 @@
+export const SET_LANGUAGE = 'SET_LANGUAGE'
+export const FETCH_CATEGORIES = 'FETCH_CATEGORIES'
+export const FETCH_PRODUCTS = 'FETCH_PRODUCTS'
+export const FETCH_UI_STATE = 'FETCH_UI_STATE'
+export const FETCH_DETAIL = 'FETCH_DETAIL'
+
+export const FULFILLED = '_FULFILLED'
+export const PENDING = '_PENDING'
+export const REJECTED = '_REJECTED'

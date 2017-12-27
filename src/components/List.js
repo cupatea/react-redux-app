@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import MaterialList, { ListItem, ListItemText } from 'material-ui/List'
+import ButtonBase from 'material-ui/ButtonBase'
 
 const styles = {
   list: {
@@ -9,7 +10,10 @@ const styles = {
 	},
 	headline: {
 		textTransform: 'uppercase',		
-	},
+  },
+  button: {
+    textAlign: 'left',
+  }
 }
 const List = props => {
   const { classes } = props
@@ -20,10 +24,9 @@ const List = props => {
 			</ListItem>  
 			{ props.items.map((item, index) => (
 				<ListItem key = { index }>
-					<ListItemText 
-						onClick = { () => item.action(item.path) } 
-						secondary = { item.title }
-					/>   
+          <ButtonBase  className = { classes.button } onClick = { () => item.action(item.path) }>
+					  <ListItemText secondary = { item.title }/>   
+          </ButtonBase>  
 				</ListItem>
       ))}   
 		</MaterialList> 

@@ -34,50 +34,56 @@ const styles = theme => ({
   panel: {
     display: 'grid',
     paddingTop: '0px',
+    marginTop: '24px',
   },
-  info: {
+  info: { 
     alignSelf: 'center',
     justifySelf: 'center',
     fontSize: '13px',
     fontWeight: 400,
   },
-  link: {    
-    marginTop: '24px',
-    display: 'grid',
-    textDecoration: 'none',
-  }
 })
 
+
 const Category = props => {
-  const { classes } = props
-  const info = <Typography className = {classes.info} component = "p" >{ `${props.info} items` }</Typography>
-  const button = <Link to = { props.path } className = { classes.link }><Button text = { props.button }/></Link>
+  const { classes, info, buttonText, path, image, title, linkTo } = props
+
+  const renderButton = () => 
+    <CardActions className = { classes.panel }>
+      <Button 
+        className = { classes.button } 
+        click = { () => linkTo(path) } 
+        text = { buttonText }
+      />
+    </CardActions>  
+
+  const renderInfo = () =>
+    <Typography className = { classes.info } >
+        { info }
+    </Typography>
+  
   return (
     <div className = { classes.root }>
       <Card className = { classes.card }>
-        <Link to = { props.path } className = { props.classes.link }>
+        <Link to = { path } className = { classes.link }>
           <CardMedia
             className = { classes.media }
-            image = { props.image }
-            title = { props.title }
+            image = { image }
+            title = { title }
           />
         </Link> 
         <CardContent className = { classes.content }>
           <Typography
             className = { classes.title }
-            type = "headline"
-            component = "h4"
+            type = 'title'
+            component = 'h4'
           >
-              { props.title }
+              { title }
           </Typography>
-          <CardActions className = { classes.panel }>
-            { props.info && info }
-            { props.button && button }
-          </CardActions>
+            { info && renderInfo() }
+            { buttonText && renderButton() }       
         </CardContent>
-   
       </Card>
- 
     </div>
   )
 }
@@ -86,7 +92,8 @@ Category.propTypes = {
   title: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
-  info: PropTypes.number,
+  info: PropTypes.string,
   button: PropTypes.string,
+  linkTo:  PropTypes.func,
 }
 export default withStyles(styles)(Category)

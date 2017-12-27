@@ -1,12 +1,17 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { detailPath, serverURL } from '../config/pathHelper'
+import { initProducts, initCategories } from '../actions'
+import { push } from 'react-router-redux'
 
 import { withStyles } from 'material-ui/styles'
 import Grid from 'material-ui/Grid'
 import PropTypes from 'prop-types'
+import { CircularProgress } from 'material-ui/Progress'
 import Category from '../components/Category'
 import Product from '../components/Product'
+import ScrollToTopOnMount from './ScrollToTopOnMount'
+
 
 const styles = theme => ({
   root: {
@@ -15,35 +20,89 @@ const styles = theme => ({
   container: {
     maxWidth: 1440,
     justifySelf: 'center',
-  }
+  },
+  errorMessage: {
+    textAlign: 'center',
+    fontFamily: 'Roboto'
+  },
+  progress: {
+    justifySelf: 'center',
+    margin: `0 ${theme.spacing.unit * 2}px`,
+  },
 })
 
 class Products extends Component {
+  classes = this.props.classes
+
+  componentWillMount() {
+    if (!this.props.categories.length){
+      this.props.onInitCategories(this.props.locale)
+    } 
+    this.props.onInitProducts(this.props.locale, this.props.match.params.slug)
+  }
+
+  componentWillReceiveProps(nextProps) { 
+    if (nextProps.match.params.slug !== this.props.match.params.slug || nextProps.locale !== this.props.locale) {
+      this.props.onInitProducts(nextProps.locale, nextProps.match.params.slug)
+    }
+  }
+
+  renderCategory({ title, image, slug }, itemsCount){
+    return(
+      <Category 
+        title = { title }
+        image = { serverURL(image.url)} 
+        info  = { itemsCount + ' items' } 
+        path  = { slug }
+      />
+    )
+  }
+
+  renderProduct({ title, images, price }){
+    return(
+      <Product
+        title = { title }
+        image = { serverURL(images[0].url) }
+        price = { price }
+      />
+    ) 
+  }  
+
+  renderProductsGrid(products){
+    return(
+      products.map(product =>
+        <Grid 
+          onClick = { () => this.props.handleLocationChange(detailPath(this.props.match.params.slug, product.id )) }
+          key = { product.id } 
+          className = { this.classes.container } 
+          item xs = { 12 } 
+          sm = { 6 } 
+          md = { 4 } 
+          lg = { 4 }
+        >
+        { this.renderProduct(product) }
+      </Grid> 
+      )
+    )  
+  }
+  renderLoading(){
+    return <CircularProgress className = { this.classes.progress } size = { 50 } color = "accent" />
+  }
+
+  renderError(){
+    return <p className = { this.classes.errorMessage } >Error! Can't fetch products from the server</p>
+  }
 
   render(){
-    const { classes } = this.props
-    const currentCategory = this.props.categories.find(c => c.slug === this.props.match.params.slug)
-    const list = this.props.products
-      .filter(p => p.category_id === currentCategory.id)
-      .map(p =>
-      <Grid key = { p.id } className = { classes.container } item xs = { 12 } sm = { 6 } md = { 4 } lg = { 4 }>
-        <Product
-          title = { p.title }
-          image = { p.image }
-          price = { p.price }
-        />
-      </Grid>
-    )
+     
     return (
-      <div className = { classes.root }>
-        <Category 
-          title = { currentCategory.title }
-          image = { currentCategory.image } 
-          info  = { list.length } 
-          path  = { currentCategory.slug }
-        />
-        <Grid className = { classes.container } container spacing = { 24 }>
-          { list }
+      <div className = { this.classes.root }>
+        <ScrollToTopOnMount />
+        { this.props.loading && this.renderLoading() }
+        { this.props.error && this.renderError() }
+        { this.props.loaded && this.renderCategory(this.props.category, this.props.count) }
+        <Grid className = { this.classes.container } container spacing = { 24 }>
+          { this.props.loaded && this.renderProductsGrid(this.props.products) }
         </Grid>
       </div>
     )    
@@ -56,9 +115,22 @@ Products.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    categories: state.categories,
-    products: state.products,
+    locale: state.uiState.locale, 
+    categories: state.categories.data,
+    products: state.products.products,
+    category: state.products.category,
+    count: state.products.count,
+    loading: state.products.loading,
+    loaded: state.products.loaded,
+    error: state.products.error,
+  }
+}
+const mapDispachToProps = dispatch => {
+  return {
+    onInitCategories: (locale) => dispatch(initCategories(locale)),
+    onInitProducts: (locale, slug) => dispatch(initProducts(locale, slug)),
+    handleLocationChange: (path) => dispatch(push(path)),
   }
 }
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps)(Products)))
+export default withStyles(styles)(connect(mapStateToProps, mapDispachToProps)(Products))

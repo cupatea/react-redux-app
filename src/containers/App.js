@@ -1,95 +1,61 @@
 import React, { Component } from 'react'
-import { Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { increment, selectLanguage }  from '../store/actions'
+import { push } from 'react-router-redux'
+import { withRouter } from 'react-router'
+import { initUiState, initCategories, initProducts } from '../actions'
+import { productsPath } from '../config/pathHelper'
 
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { CircularProgress } from 'material-ui/Progress'
+import Toolbar from './Toolbar'
 import Tabs from '../components/Tabs'
-import Drawer from '../components/Drawer'
-import Categories from './Categories'
-import Products from './Products'
+
 
 class App extends Component {
-  state = {
-    locales: ['en', 'ua', 'ru'],
-    isDrowerOpen: false,
-    isLangMenuOpen: false,
+  componentWillMount() {
+    this.props.initUiState()
   }
-
-  toggleDrawer = (isOpen) => () => {
-    this.setState({
-      isDrowerOpen: isOpen,
-    })
+  componentWillReceiveProps(nextProps) { 
+    if (nextProps.locale !== this.props.locale) {
+      this.props.initUiState(nextProps.locale)
+      this.props.onInitCategories(nextProps.locale)
+    }
   }
-  handleLangMenuOpen = () => {
-    this.setState({ isLangMenuOpen: true })
-  }
-
-  handleLangMenuClose = () => {
-    this.setState({ isLangMenuOpen: false })
-  }
-
+ 
   handleCategoryChange = (slug) => {
-    this.props.history.push(`/${slug}`)
-    window.scrollTo(0, 0)  
+    this.props.handleLocationChange(productsPath(slug)) 
+  }
+
+  renderToolbar() {
+    return <Toolbar />
+  }
+
+  renderTabs(){
+    const currentTabSlug = this.props.router.location.pathname.split('/')[2]
+    return(
+      <Tabs 
+        tabs = { this.props.categories } 
+        currentTab = { currentTabSlug } 
+        action = { this.handleCategoryChange }
+      />
+    )
+  }
+
+  renderLoading(){
+    return <CircularProgress className = { this.classes.progress } size = { 50 } color = "accent" />
+  }
+
+  renderError(){
+    return <p className = { this.classes.errorMessage } >Error! Can't fetch data from the server</p>
   }
 
   render() {
-    const currentTabSlug = this.props.location.pathname.split('/')[1]
-    const drawerContent = [
-      {
-        headline: "Category",
-        items: this.props.categories.map(c => 
-          ({ 
-            title: c.title, 
-            path: c.slug, 
-            action: this.handleCategoryChange 
-          })
-        )
-      },
-      {
-        headline: 'Language',
-        items: this.state.locales.map(l => 
-          ({ 
-            title: l.toUpperCase(), 
-            path: l, 
-            action: this.props.handleLocaleChange 
-          })
-        )
-      },
-    ]
     return(
-      <div>
-        <Header 
-          incrementCounter = { this.props.increment }
-          openDrawer = { this.toggleDrawer }
-          closeLangMenu = { this.handleLangMenuClose }
-          openLangMenu = { this.handleLangMenuOpen }
-          selectLang = { this.props.handleLocaleChange }
-
-          appName = { this.props.appName } 
-          cartCount = { this.props.cartCount }
-          langList = { this.state.locales }
-          currentLang = { this.props.currentLang }
-          isLangMenuOpen = { this.state.isLangMenuOpen }
-        
-        />
-        <Drawer 
-          content = { drawerContent }
-          isOpen = { this.state.isDrowerOpen } 
-          closeDrawer = {this.toggleDrawer} 
-        />
-        <Tabs 
-          tabs = { this.props.categories } 
-          currentTab = { currentTabSlug } 
-          action = { this.handleCategoryChange }
-        />
-        
-        <Route exact path = {'/'}       component = { Categories }/>
-        <Route exact path = {`/:slug`} component = { Products } />
-
-        <Footer text = 'Contacts' />
+      <div>       
+        {/* { this.state.loading && this.renderLoading() } */}
+        {/* { this.state.error && this.renderError() }  */}
+        { this.renderToolbar() } 
+        { this.renderTabs() }
+        { this.props.children }
       </div>
     )
   }
@@ -97,19 +63,22 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    appName: state.appName,
-    categories: state.categories,
-    currentLang: state.locale,
-    cartCount: state.cartCount,
-
+    categories: state.categories.data,
+    locale: state.uiState.locale,
+    loading: state.uiState.loading,
+    loaded: state.uiState.loaded,
+    error: state.uiState.error,
+    router: state.router,
   }
 }
 
 const mapDispachToProps = dispatch => {
   return {
-    increment: () => dispatch(increment()),
-    handleLocaleChange: (locale) => dispatch(selectLanguage(locale))
+    initUiState: (locale) => dispatch(initUiState(locale)),
+    onInitCategories: (locale) => dispatch(initCategories(locale)),
+    onInitProducts: (locale) => dispatch(initProducts(locale)),
+    handleLocationChange: (path) => dispatch(push(path))
   }
 }
 
-export default withRouter(connect(mapStateToProps,mapDispachToProps)(App))
+export default withRouter(connect(mapStateToProps, mapDispachToProps)(App))

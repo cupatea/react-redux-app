@@ -16,12 +16,11 @@ const styles = theme => ({
   },
 })
 
-const Footer = props => {
-  const { classes } = props;
+const Footer = ({ classes, text }) => {
   return (
-    <footer className={classes.root}>
-      <Button raised color="accent" className={classes.button}>
-        {props.text}
+    <footer className = { classes.root }>
+      <Button raised color="accent" className = { classes.button }>
+        { text }
       </Button>
     </footer>
   )

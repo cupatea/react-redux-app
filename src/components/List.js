@@ -15,14 +15,12 @@ const styles = {
     textAlign: 'left',
   }
 }
-const List = props => {
-  const { classes } = props
-  return (
+const List = ({ classes, headline, items }) => (
 		<MaterialList className = { classes.list }>
 			<ListItem className = { classes.headline }>
-				<ListItemText primary = { props.headline }/>
+				<ListItemText primary = { headline }/>
 			</ListItem>  
-			{ props.items.map((item, index) => (
+			{ items.map((item, index) => (
 				<ListItem key = { index }>
           <ButtonBase  className = { classes.button } onClick = { () => item.action(item.path) }>
 					  <ListItemText secondary = { item.title }/>   
@@ -30,9 +28,7 @@ const List = props => {
 				</ListItem>
       ))}   
 		</MaterialList> 
-	)	 
-}  
-
+)
 List.propTypes = {
 	classes: PropTypes.object.isRequired,
 	headline: PropTypes.string,

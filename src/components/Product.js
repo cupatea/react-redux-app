@@ -38,36 +38,33 @@ const styles = theme => ({
   }
 })
 
-const Product = props => {
-  const { classes } = props
-  return (
-    <div className={classes.root}>
-      <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
-          image={props.image}
-          title={props.title}
-        />
-        <CardContent className={classes.content}>
-          <Typography
-            className={classes.title}
-            type="headline"
-            component="h4"
-          >
-            {props.title}
-          </Typography>
-        </CardContent>
-          <Typography
-            className={classes.price}
-            type="title"
-            component="span"
-          >
-            ₴{props.price}
-          </Typography>
-      </Card>
-    </div>
-  )
-}
+const Product = ({ classes, image, title, price}) => (
+  <div className = { classes.root }>
+    <Card className = { classes.card }>
+      <CardMedia
+        className = { classes.media }
+        image = { image }
+        title = { title }
+      />
+      <CardContent className = { classes.content }>
+        <Typography
+          className = { classes.title }
+          type = 'headline'
+          component = 'h4'
+        >
+          { title }
+        </Typography>
+      </CardContent>
+        <Typography
+          className = { classes.price }
+          type = 'title' 
+          component = 'span'
+        >
+          ₴{ price }
+        </Typography>
+    </Card>
+  </div>
+)
 
 Product.propTypes = {
   classes: PropTypes.object.isRequired,

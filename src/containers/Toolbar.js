@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { selectLanguage, initUiState, initCategories, initProducts } from '../actions'
 import PropTypes from 'prop-types'
+import { productsPath } from '../config/pathHelper'
 
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
@@ -137,8 +138,8 @@ class Toolbar extends Component {
     const items = {
       category: this.props.categories.map(c => ({ 
         title: c.title, 
-        path: c.slug, 
-        action: this.handleCategoryChange,
+        path: productsPath(c.slug), 
+        action: this.props.handleLocationChange,
       })),
       language: this.props.locales.map(l =>({ 
         title: l.toUpperCase(), 

@@ -45,8 +45,7 @@ const styles = theme => ({
 })
 
 
-const Category = props => {
-  const { classes, info, buttonText, path, image, title, linkTo } = props
+const Category = ({ classes, info, buttonText, path, image, title, linkTo })  => {
 
   const renderButton = () => 
     <CardActions className = { classes.panel }>

@@ -25,27 +25,23 @@ const styles = theme => ({
 })
 
 
-const Tabs = props => {
-  const { classes } = props
-  const currentTab = props.currentTab ? props.currentTab : false
-  return (
-    <Hidden only = 'xs'>
-      <Paper className = { classes.root }>
-        <MaterailTabs className = { props.classes.tabs} value = { currentTab } >
-          {props.tabs.map(tab => 
-            <Tab 
-              className = { classes.tab } 
-              key       = { tab.id }
-              value     = { tab.slug }
-              label     = { tab.title } 
-              onClick   = { (slag) => props.action(tab.slug)}
-            />
-          )}
-        </MaterailTabs>
-      </Paper>
-    </Hidden>
-  )
-}
+const Tabs = ({ classes, currentTab, tabs, action }) => (
+  <Hidden only = 'xs'>
+    <Paper className = { classes.root }>
+      <MaterailTabs className = { classes.tabs } value = { currentTab ? currentTab : false } >
+        { tabs.map(tab => 
+          <Tab 
+            className = { classes.tab } 
+            key       = { tab.id }
+            value     = { tab.slug }
+            label     = { tab.title } 
+            onClick   = { (slag) => action(tab.slug) }
+          />
+        )}
+      </MaterailTabs>
+    </Paper>
+  </Hidden>
+)
 
 Tabs.propTypes = {
   classes: PropTypes.object.isRequired,

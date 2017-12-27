@@ -9,16 +9,21 @@ const styles = theme => ({
   root: {
     display: 'grid',
     boxShadow: 'none',
+    padding: '8px',
   },
   tabs: {
     justifySelf: 'center',
+    
   },
   tab: {
+    color: '#202020',
+    fontWeight: 500,
     textTransform: 'none',
     height: '35px',
     opacity: 1,
   },
 })
+
 
 const Tabs = props => {
   const { classes } = props
@@ -44,7 +49,6 @@ const Tabs = props => {
 
 Tabs.propTypes = {
   classes: PropTypes.object.isRequired,
-  currentTab: PropTypes.string.isRequired,
   tabs: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     slug: PropTypes.string,

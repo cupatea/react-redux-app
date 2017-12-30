@@ -7,13 +7,10 @@ import Hidden from 'material-ui/Hidden'
 
 const styles = theme => ({
   root: {
-    display: 'grid',
+    display: 'flex',
+    justifyContent: 'center',
     boxShadow: 'none',
     padding: '8px',
-  },
-  tabs: {
-    justifySelf: 'center',
-    
   },
   tab: {
     color: '#202020',
@@ -28,7 +25,7 @@ const styles = theme => ({
 const Tabs = ({ classes, currentTab, tabs, action }) => (
   <Hidden only = 'xs'>
     <Paper className = { classes.root }>
-      <MaterailTabs className = { classes.tabs } value = { currentTab ? currentTab : false } >
+      <MaterailTabs value = { currentTab ? currentTab : false } >
         { tabs.map(tab => 
           <Tab 
             className = { classes.tab } 

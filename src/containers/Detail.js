@@ -20,13 +20,13 @@ import ScrollToTopOnMount from './ScrollToTopOnMount'
 
 const styles = theme => ({
   root: {
-    display: 'grid',
+    display: 'flex',
+    justifyContent: 'center',
     paddingTop: '20px',
     margin: '0 16px',
   },
   container: {
     maxWidth: 1440,
-    justifySelf: 'center',
   },
   media: {
     justifySelf: 'center',
@@ -34,9 +34,15 @@ const styles = theme => ({
     width: '100%',
   },
   content:{
-    display: 'grid',
+    display: 'flex',
+    flexDirection: 'column',
     marginTop: '8px',
-    // margin: '0px 15px',
+  },
+  actions:{
+    display: 'flex',
+    justifyContent: 'flex-start',
+    marginTop: '8px',
+    padding: '0 16px',
   },
   headline: {
     justifySelf: 'start',
@@ -155,7 +161,7 @@ class Detail extends Component {
                 <Typography className = { this.classes.title }type = "title" component = "h2">Description</Typography>
                 <Typography className = { this.classes.description }type = "body2" component = "p">{ this.props.product.description }</Typography>
               </CardContent>
-              <CardActions className = { this.classes.content }>
+              <CardActions className = { this.classes.actions }>
                 <Button className = { this.classes.button } text = "Add to cart"/>
               </CardActions>  
             </Grid>

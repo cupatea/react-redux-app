@@ -8,12 +8,13 @@ import Button from './Button'
 
 const styles = theme => ({
   root: {
-    display: 'grid',
+    display: 'flex',
+    justifyContent:'center',
     width: '100%',
   },
   card: {
-    display: 'grid',
-    justifySelf: 'center',
+    // display: 'grid',
+    // justifySelf: 'center',
     width: '100%',
     maxWidth: 1440,
     boxShadow: 'none',
@@ -22,23 +23,25 @@ const styles = theme => ({
     height: 320,
   },
   content:{
-    display: 'grid',
+    display: 'flex',
+    // justifyContent:'center',
+    flexDirection: 'column',
     padding: '24px 0px',
     margin: '0px',
   },
   title: {
-    justifySelf: 'center',
+    textAlign: 'center',
     fontSize: '16.9px',
     fontWeight: 500,
   },
   panel: {
-    display: 'grid',
+    display: 'flex',
+    justifyContent:'center',
     paddingTop: '0px',
     marginTop: '24px',
   },
   info: { 
     alignSelf: 'center',
-    justifySelf: 'center',
     fontSize: '13px',
     fontWeight: 400,
   },

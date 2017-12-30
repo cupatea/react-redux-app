@@ -5,12 +5,12 @@ import Button from 'material-ui/Button'
 
 const styles = theme => ({
   root: {
-    display: 'grid',
+    display: 'flex',
+    justifyContent: 'center',
     marginTop: '32px',
   },
   button:{
     width: '10%',
-    justifySelf: 'center',
     backgroundColor: 'black',
     fontSize: '13px'
   },

@@ -13,7 +13,14 @@ import ScrollToTopOnMount from './ScrollToTopOnMount'
 
 const styles = theme => ({
   root:{
-    display: 'grid',
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+  },
+  container: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
   },
   errorMessage: {
     textAlign: 'center',
@@ -64,8 +71,10 @@ class Categories extends Component{
         <ScrollToTopOnMount />
         { this.props.loading && this.renderLoading() }
         { this.props.error && this.renderError() }
-        { this.props.loaded && this.props.categories.map(c => this.renderCategory(c))  } 
-        { this.props.loaded && this.renderFooter() }    
+        <div className = { this.classes.container }>
+          { this.props.loaded && this.props.categories.map(c => this.renderCategory(c))  } 
+          { this.props.loaded && this.renderFooter() }    
+        </div>
       </div>
     )
   }    

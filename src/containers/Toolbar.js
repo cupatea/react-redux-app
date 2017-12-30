@@ -35,9 +35,6 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-between',
   },
-  logoContainer: {
-    display: 'grid',
-  },
   logoButton:{
     justifySelf: 'center',
   },
@@ -115,7 +112,7 @@ class Toolbar extends Component {
 
   renderAppLogo(longName, shortName, action){
     return(
-      <div className = { this.props.classes.logoContainer } >
+      <div>
         <Hidden only = { ['sm', 'md', 'lg', 'xl'] }>
           <ButtonBase className = { this.props.classes.logoButton } onClick = { () => this.props.handleLocationChange('/') }> 
             <Typography className = { this.props.classes.name }>

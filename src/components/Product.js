@@ -7,12 +7,11 @@ import Typography from 'material-ui/Typography'
 
 const styles = theme => ({
   root: {
-    display: 'grid',
+    display: 'flex',
+    justifyContent: 'center',
     width: '100%'
   },
   card: {
-    display: 'grid',
-    justifySelf: 'center',
     width: '100%',
     maxWidth: 300,
     boxShadow: 'none',
@@ -21,17 +20,18 @@ const styles = theme => ({
     height: 320,
   },
   content:{
-    display: 'grid',
+    display: 'flex',
+    justifyContent: 'center',
     marginTop: '24px',
     padding: 0,
   },
   title: {
-    justifySelf: 'center',
+    textAlign: 'center',
     fontSize: '16.9px',
     fontWeight: 500,
   },
   price:{
-    justifySelf: 'center',
+    textAlign: 'center',
     marginBottom: '24px',
     fontSize: '13px',
     fontWeight: 400,

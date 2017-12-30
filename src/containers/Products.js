@@ -15,18 +15,20 @@ import ScrollToTopOnMount from './ScrollToTopOnMount'
 
 const styles = theme => ({
   root: {
-    display: 'grid',
+    display: 'flex',
+    justifyContent: 'center',
   },
-  container: {
+  container:{
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
     maxWidth: 1440,
-    justifySelf: 'center',
   },
   errorMessage: {
     textAlign: 'center',
     fontFamily: 'Roboto'
   },
   progress: {
-    justifySelf: 'center',
     margin: `0 ${theme.spacing.unit * 2}px`,
   },
 })
@@ -100,10 +102,12 @@ class Products extends Component {
         <ScrollToTopOnMount />
         { this.props.loading && this.renderLoading() }
         { this.props.error && this.renderError() }
-        { this.props.loaded && this.renderCategory(this.props.category, this.props.count) }
-        <Grid className = { this.classes.container } container spacing = { 24 }>
-          { this.props.loaded && this.renderProductsGrid(this.props.products) }
-        </Grid>
+        <div className = { this.classes.container }>  
+          { this.props.loaded && this.renderCategory(this.props.category, this.props.count) }      
+          <Grid container spacing = { 24 }>
+            { this.props.loaded && this.renderProductsGrid(this.props.products) }
+          </Grid>
+        </div>
       </div>
     )    
   }  

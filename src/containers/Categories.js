@@ -2,19 +2,16 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import  { initCategories }  from '../actions'
 import { push } from 'react-router-redux'
-
 import { withStyles } from 'material-ui/styles'
 import { CircularProgress } from 'material-ui/Progress'
 import { serverURL, productsPath } from '../config/pathHelper' 
 import Category from '../components/Category'
 import Footer from '../components/Footer'
-
 import ScrollToTopOnMount from './ScrollToTopOnMount'
 
 const styles = theme => ({
   root:{
     display: 'flex',
-    width: '100%',
     justifyContent: 'center',
   },
   container: {
@@ -22,22 +19,15 @@ const styles = theme => ({
     width: '100%',
     flexDirection: 'column',
   },
-  errorMessage: {
-    textAlign: 'center',
-    fontFamily: 'Roboto'
-  },
-  progress: {
-    justifySelf: 'center',
-    margin: `0 ${theme.spacing.unit * 2}px`,
-  },
 })
 
 class Categories extends Component{
-  classes = this.props.classes
-
+	classes = this.props.classes
+	
   componentWillMount() {
     this.props.onInitCategories(this.props.locale)
-  }
+	}
+	
   componentWillReceiveProps(nextProps) { 
     if (nextProps.locale !== this.props.locale) {
       this.props.onInitCategories(nextProps.locale)
@@ -57,7 +47,7 @@ class Categories extends Component{
     )
   }
   renderError(){
-    return <p className = {this.classes.errorMessage}>Error! Can't fetch categories from the server</p>
+    console.log("Error! Can't fetch categories from the server")
   }
   renderLoading(){
     return <CircularProgress className = { this.classes.progress } size = { 50 } color = "accent" />
@@ -65,21 +55,25 @@ class Categories extends Component{
   renderFooter(){
     return <Footer text = { this.props.footerButtonText } />
   }
+  renderContentContainer(categories){
+    return(
+      <div className = { this.classes.container }>
+        { categories.map(c => this.renderCategory(c))  } 
+        { this.renderFooter() }    
+      </div>
+    )
+  }
   render(){
     return (
       <div className = { this.classes.root }>
         <ScrollToTopOnMount />
         { this.props.loading && this.renderLoading() }
         { this.props.error && this.renderError() }
-        <div className = { this.classes.container }>
-          { this.props.loaded && this.props.categories.map(c => this.renderCategory(c))  } 
-          { this.props.loaded && this.renderFooter() }    
-        </div>
+        { this.props.loaded && this.renderContentContainer(this.props.categories) }
       </div>
     )
   }    
 }
-
 
 const mapStateToProps = state => {
   return {

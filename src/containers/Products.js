@@ -37,16 +37,14 @@ class Products extends Component {
   classes = this.props.classes
 
   componentWillMount() {
-    if (!this.props.categories.length){
+    if (!this.props.categories.length)
       this.props.onInitCategories(this.props.locale)
-    } 
     this.props.onInitProducts(this.props.locale, this.props.match.params.slug)
   }
 
   componentWillReceiveProps(nextProps) { 
-    if (nextProps.match.params.slug !== this.props.match.params.slug || nextProps.locale !== this.props.locale) {
+    if (nextProps.match.params.slug !== this.props.match.params.slug || nextProps.locale !== this.props.locale)
       this.props.onInitProducts(nextProps.locale, nextProps.match.params.slug)
-    }
   }
 
   renderCategory({ title, image, slug }, itemsCount){
@@ -81,9 +79,8 @@ class Products extends Component {
           sm = { 6 } 
           md = { 4 } 
           lg = { 4 }
-        >
-        { this.renderProduct(product) }
-      </Grid> 
+          children = { this.renderProduct(product)  }
+        />
       )
     )  
   }
@@ -92,22 +89,24 @@ class Products extends Component {
   }
 
   renderError(){
-    return <p className = { this.classes.errorMessage } >Error! Can't fetch products from the server</p>
+    console.log("Error! Can't fetch products from the server")
+  }
+  renderContentContainer({products, category, count}){
+    return(
+      <div className = { this.classes.container }>    
+        { this.renderCategory(category, count) }      
+        <Grid container spacing = { 24 } children = { this.renderProductsGrid(products) } />
+      </div>
+    )
   }
 
   render(){
-     
     return (
       <div className = { this.classes.root }>
         <ScrollToTopOnMount />
         { this.props.loading && this.renderLoading() }
         { this.props.error && this.renderError() }
-        <div className = { this.classes.container }>  
-          { this.props.loaded && this.renderCategory(this.props.category, this.props.count) }      
-          <Grid container spacing = { 24 }>
-            { this.props.loaded && this.renderProductsGrid(this.props.products) }
-          </Grid>
-        </div>
+        { this.props.loaded && this.renderContentContainer( this.props )}
       </div>
     )    
   }  
@@ -127,6 +126,7 @@ const mapStateToProps = state => {
     loading: state.products.loading,
     loaded: state.products.loaded,
     error: state.products.error,
+    lineItems: state.cart.lineItems,
   }
 }
 const mapDispachToProps = dispatch => {

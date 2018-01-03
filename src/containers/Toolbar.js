@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { selectLanguage, initUiState, initCategories, initProducts } from '../actions'
 import PropTypes from 'prop-types'
-import { productsPath } from '../config/pathHelper'
+import { productsPath, cartPath } from '../config/pathHelper'
 
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
@@ -72,28 +72,32 @@ class Toolbar extends Component {
   }
   
   renderShopingCartIcon(count) {
-    if (count > 0){
-      return (
-        <IconButton className = { this.props.classes.navButton } aria-label = "ShoppingCart">
-          <Badge className = { this.props.classes.badge } badgeContent = { count } color = "accent">
-            <ShoppingCartIcon />
-          </Badge>
-        </IconButton>  
-      )
-    } 
-    return( 
-      <IconButton className = { this.props.classes.navButton } aria-label = "ShoppingCart">
-        <ShoppingCartIcon />
-      </IconButton>    
-    ) 
-  }
-
+    const icon = <ShoppingCartIcon />
+    const withBadge =   
+			<Badge 
+        className = { this.props.classes.badge } 
+        badgeContent = { count } 
+        color = "accent"
+        children = { icon }
+    	/>
+    return (
+      <IconButton 
+        className = { this.props.classes.navButton } 
+        aria-label = "ShoppingCart" 
+        onClick = { () => this.props.handleLocationChange(cartPath()) }
+        children = { count ? withBadge : icon }
+      />
+    )
+	} 
   renderMenuIcon(forWhat){
     return(
       <Hidden only = { forWhat } >
-        <IconButton className = { this.props.classes.navButton } aria-label = "Menu" onClick = { this.toggleDrawer(true) }>
-          <MenuIcon />
-        </IconButton>
+        <IconButton 
+          className = { this.props.classes.navButton } 
+          aria-label = "Menu" 
+          onClick = { this.toggleDrawer(true) }
+          children = { <MenuIcon /> }
+        />
       </Hidden >
     )     
   }    
@@ -111,22 +115,14 @@ class Toolbar extends Component {
   }
 
   renderAppLogo(longName, shortName, action){
+    const returnLogo = ( name ) => 
+      <ButtonBase className = { this.props.classes.logoButton } onClick = { () => this.props.handleLocationChange('/') }> 
+        <Typography className = { this.props.classes.name } children = { name } />
+      </ButtonBase>  
     return(
       <div>
-        <Hidden only = { ['sm', 'md', 'lg', 'xl'] }>
-          <ButtonBase className = { this.props.classes.logoButton } onClick = { () => this.props.handleLocationChange('/') }> 
-            <Typography className = { this.props.classes.name }>
-              { shortName }
-            </Typography>  
-          </ButtonBase>  
-        </Hidden >  
-        <Hidden only = 'xs'>
-          <ButtonBase  className = { this.props.classes.logoButton } onClick = { () => this.props.handleLocationChange('/') }>
-            <Typography className = { this.props.classes.name }>
-              { longName }
-            </Typography>  
-          </ButtonBase>  
-        </Hidden >  
+        <Hidden only = { ['sm', 'md', 'lg', 'xl'] } children = { returnLogo(shortName) } />
+        <Hidden only = 'xs' children = { returnLogo(longName) }/>
       </div>  
     )  
   }    
@@ -139,7 +135,7 @@ class Toolbar extends Component {
         action: this.props.handleLocationChange,
       })),
       language: this.props.locales.map(l =>({ 
-        title: l.toUpperCase(), 
+        title: l, 
         path: l, 
         action: this.props.handleLocaleChange 
       })) 
@@ -181,7 +177,7 @@ class Toolbar extends Component {
 }
 const mapStateToProps = state => {
   return {
-    cartCount: 0,
+    cartCount: state.cart.quantityCounter,
     categories: state.categories.data,
     locale: state.uiState.locale,
     locales: state.uiState.locales,
@@ -202,14 +198,13 @@ const mapDispachToProps = dispatch => {
   }
 }
 
-
 Toolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   appName: PropTypes.string.isRequired,
   shortName: PropTypes.string.isRequired,
-  langList: PropTypes.array.isRequired,
-  currentLang: PropTypes.string.isRequired,
-  selectLang: PropTypes.func.isRequired,
+  locales: PropTypes.array.isRequired,
+  locale: PropTypes.string.isRequired,
+  handleLocaleChange: PropTypes.func.isRequired,
   cartCount: PropTypes.number.isRequired,
 }
 

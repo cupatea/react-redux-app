@@ -35,24 +35,23 @@ const styles = theme => ({
 
 class Products extends Component {
   classes = this.props.classes
-
   componentWillMount() {
     if (!this.props.categories.length)
       this.props.onInitCategories(this.props.locale)
     this.props.onInitProducts(this.props.locale, this.props.match.params.slug)
   }
 
-  componentWillReceiveProps(nextProps) { 
+  componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.slug !== this.props.match.params.slug || nextProps.locale !== this.props.locale)
       this.props.onInitProducts(nextProps.locale, nextProps.match.params.slug)
   }
 
   renderCategory({ title, image, slug }, itemsCount){
     return(
-      <Category 
+      <Category
         title = { title }
-        image = { serverURL(image.url)} 
-        info  = { itemsCount + ' items' } 
+        image = { serverURL(image.url)}
+        info  = { itemsCount + ' items' }
         path  = { slug }
       />
     )
@@ -65,24 +64,24 @@ class Products extends Component {
         image = { serverURL(images[0].url) }
         price = { price }
       />
-    ) 
-  }  
+    )
+  }
 
   renderProductsGrid(products){
     return(
       products.map(product =>
-        <Grid 
+        <Grid
           onClick = { () => this.props.handleLocationChange(detailPath(this.props.match.params.slug, product.id )) }
-          key = { product.id } 
-          className = { this.classes.container } 
-          item xs = { 12 } 
-          sm = { 6 } 
-          md = { 4 } 
+          key = { product.id }
+          className = { this.classes.container }
+          item xs = { 12 }
+          sm = { 6 }
+          md = { 4 }
           lg = { 4 }
           children = { this.renderProduct(product)  }
         />
       )
-    )  
+    )
   }
   renderLoading(){
     return <CircularProgress className = { this.classes.progress } size = { 50 } color = "accent" />
@@ -93,8 +92,8 @@ class Products extends Component {
   }
   renderContentContainer({products, category, count}){
     return(
-      <div className = { this.classes.container }>    
-        { this.renderCategory(category, count) }      
+      <div className = { this.classes.container }>
+        { this.renderCategory(category, count) }
         <Grid container spacing = { 24 } children = { this.renderProductsGrid(products) } />
       </div>
     )
@@ -108,8 +107,8 @@ class Products extends Component {
         { this.props.error && this.renderError() }
         { this.props.loaded && this.renderContentContainer( this.props )}
       </div>
-    )    
-  }  
+    )
+  }
 }
 
 Products.propTypes = {
@@ -118,7 +117,7 @@ Products.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    locale: state.uiState.locale, 
+    locale: state.uiState.locale,
     categories: state.categories.data,
     products: state.products.products,
     category: state.products.category,

@@ -4,7 +4,7 @@ import  { initCategories }  from '../actions'
 import { push } from 'react-router-redux'
 import { withStyles } from 'material-ui/styles'
 import { CircularProgress } from 'material-ui/Progress'
-import { serverURL, productsPath } from '../config/pathHelper' 
+import { serverURL, productsPath } from '../config/pathHelper'
 import Category from '../components/Category'
 import Footer from '../components/Footer'
 import ScrollToTopOnMount from './ScrollToTopOnMount'
@@ -22,28 +22,28 @@ const styles = theme => ({
 })
 
 class Categories extends Component{
-	classes = this.props.classes
-	
+  classes = this.props.classes
+
   componentWillMount() {
     this.props.onInitCategories(this.props.locale)
-	}
-	
-  componentWillReceiveProps(nextProps) { 
+  }
+
+  componentWillReceiveProps(nextProps) {
     if (nextProps.locale !== this.props.locale) {
       this.props.onInitCategories(nextProps.locale)
     }
   }
-  
+
   renderCategory({ id, title, image, slug }){
     return(
       <Category
         key         = { id }
-        title       = { title} 
-        image       = { serverURL(image.url) } 
-        path        = { productsPath(slug) } 
+        title       = { title}
+        image       = { serverURL(image.url) }
+        path        = { productsPath(slug) }
         linkTo      = { this.props.handleLocationChange }
         buttonText  = { this.props.actionButtonText }
-      />  
+      />
     )
   }
   renderError(){
@@ -58,8 +58,8 @@ class Categories extends Component{
   renderContentContainer(categories){
     return(
       <div className = { this.classes.container }>
-        { categories.map(c => this.renderCategory(c))  } 
-        { this.renderFooter() }    
+        { categories.map(c => this.renderCategory(c))  }
+        { this.renderFooter() }
       </div>
     )
   }
@@ -72,7 +72,7 @@ class Categories extends Component{
         { this.props.loaded && this.renderContentContainer(this.props.categories) }
       </div>
     )
-  }    
+  }
 }
 
 const mapStateToProps = state => {

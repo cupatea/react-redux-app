@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import  { 
-	initCategories, 
-	initDetail, 
-	addLineItem, 
-	updateQuantityCounter, 
-	updateTotalPrice 
+import  {
+  initCategories,
+  initDetail,
+  addLineItem,
+  updateQuantityCounter,
+  updateTotalPrice
 }  from '../actions'
-import { serverURL } from '../config/pathHelper' 
+import { serverURL } from '../config/pathHelper'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
 import { MuiThemeProvider } from 'material-ui/styles'
@@ -25,82 +25,82 @@ import ScrollToTopOnMount from './ScrollToTopOnMount'
 
 const styles = theme => ({
   root: {
-		display: 'flex',
-		justifyContent: 'center',
+    display: 'flex',
+    justifyContent: 'center',
   },
   container: {
-		display: 'flex',
-		maxWidth: '1440px',
-		[theme.breakpoints.up('md')]: {
-			justifyContent: 'center',
-			flexDirection: 'row',
-		},
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-		},
-	},
-	media:{
-		maxWidth: '600px',
-		[theme.breakpoints.up('md')]: {
-			width: '50%',	
-			margin: '64px 32px',
-		},
-		[theme.breakpoints.down('md')]: {
-			margin: '0px',
-			width: '80%',
-		},
-	},
-	image: {
+    display: 'flex',
+    maxWidth: '1440px',
+    [theme.breakpoints.up('md')]: {
+      justifyContent: 'center',
+      flexDirection: 'row',
+    },
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+  },
+  media:{
+    maxWidth: '600px',
+    [theme.breakpoints.up('md')]: {
+      width: '50%',
+      margin: '64px 32px',
+    },
+    [theme.breakpoints.down('md')]: {
+      margin: '0px',
+      width: '80%',
+    },
+  },
+  image: {
     justifySelf: 'center',
     height: 'auto',
     width: '100%',
   },
-	details:{
-		[theme.breakpoints.up('md')]: {
-			margin: '64px 32px',
-			width: '50%',
-			maxWidth: '400px'
-		},
-		[theme.breakpoints.down('md')]: {
-			boxSizing: 'border-box',
-			margin: '32px',
-			padding: '0 24px',
-			width: '100%',
-			maxWidth: '600px',
-		},	
-	},
-	price: {
-		margin: '16px 0 20px',
-		color: '#757575'
-	},
-	description:{
-		margin: '32px 0',
-	},
-	title: {
-		marginBottom: '16px'
-	},
-	inputLable: {
+  details:{
+    [theme.breakpoints.up('md')]: {
+      margin: '64px 32px',
+      width: '50%',
+      maxWidth: '400px'
+    },
+    [theme.breakpoints.down('md')]: {
+      boxSizing: 'border-box',
+      margin: '32px',
+      padding: '0 24px',
+      width: '100%',
+      maxWidth: '600px',
+    },
+  },
+  price: {
+    margin: '16px 0 20px',
+    color: '#757575'
+  },
+  description:{
+    margin: '32px 0',
+  },
+  title: {
+    marginBottom: '16px'
+  },
+  inputLable: {
     textTransform: 'capitalize'
   },
   actions:{
     display: 'flex',
-		justifyContent: 'flex-start',
+    justifyContent: 'flex-start',
     marginTop: '8px',
-		padding: '0 16px',
-		[theme.breakpoints.down('sm')]: {
-			justifyContent: 'center',
-		}	
+    padding: '0 16px',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    }
   },
 })
 
 class Detail extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
       stateInitiated: false,
       changeHandeled: {},
-      selectedSizes: {}, 
+      selectedSizes: {},
     }
   }
 
@@ -111,27 +111,27 @@ class Detail extends Component {
     this.props.onInitDetail(this.props.locale, this.props.match.params.id)
   }
 
-  componentWillReceiveProps(nextProps) { 
+  componentWillReceiveProps(nextProps) {
     if ( nextProps.locale !== this.props.locale)
       this.props.onInitDetail(nextProps.locale, nextProps.match.params.id)
   }
   componentWillUpdate(nextProps, nextState){
     //initiate selectedSizes object unless it's initiated
     if (nextProps.loaded && !nextState.stateInitiated){
-      const keys = Object.keys(nextProps.product.sizes) 
+      const keys = Object.keys(nextProps.product.sizes)
       this.setState({
         selectedSizes:  this.createInitialObject('', keys),
         changeHandeled: this.createInitialObject(false, keys),
         stateInitiated: true,
-      }) 
-    } 
+      })
+    }
   }
 
   handleChange = event => {
-    this.setState({ 
+    this.setState({
       selectedSizes: {
         ...this.state.selectedSizes,
-        [event.target.name]: event.target.value 
+        [event.target.name]: event.target.value
       },
       changeHandeled: {
         ...this.state.changeHandeled,
@@ -142,9 +142,9 @@ class Detail extends Component {
 
   createInitialObject = (initialValue, keysArray) => {
     const initObject = {}
-    keysArray.map(key => initObject[key] = initialValue) 
+    keysArray.map(key => initObject[key] = initialValue)
     return initObject
-  } 
+  }
 
   checkValues = (keysArray, targetObject) => {
     return keysArray.reduce((acc, key) => {
@@ -157,14 +157,14 @@ class Detail extends Component {
     this.setState({
       changeHandeled: this.createInitialObject(true, keysArray),
       stateInitiated: true,
-    }) 
+    })
     if (this.checkValues(keysArray,this.state.selectedSizes)){
       this.props.addLineItem({
         product:{
-          ...product, 
+          ...product,
           sizes: this.state.selectedSizes
         },
-        quantity: 1,  
+        quantity: 1,
       })
       this.props.updateQuantityCounter()
       this.props.updateTotalPrice()
@@ -180,24 +180,24 @@ class Detail extends Component {
 
   renderSelect(object){
     return(
-      Object.keys(object).map( key => 
-				<FormControl 
-					fullWidth
-					key = { key } 
-					error = { this.state.changeHandeled[key] && !this.state.selectedSizes[key] }
-				>
-					<InputLabel 
-						className = { this.classes.inputLable } 
-						htmlFor = { key }
-						children = { key + ' size'}
-					/>
-					<Select 
-						native
-						value = { this.state.selectedSizes[key]  }  
-						onChange = { this.handleChange } 
-						input = { <Input name = { key } id = { key } /> }
-						children = { ['',...object[key]].map( e => <option key = { e } value = { e }>{ e }</option>) }
-					/>
+      Object.keys(object).map( key =>
+        <FormControl
+          fullWidth
+          key = { key }
+          error = { this.state.changeHandeled[key] && !this.state.selectedSizes[key] }
+        >
+          <InputLabel
+            className = { this.classes.inputLable }
+            htmlFor = { key }
+            children = { key + ' size'}
+          />
+          <Select
+            native
+            value = { this.state.selectedSizes[key]  }
+            onChange = { this.handleChange }
+            input = { <Input name = { key } id = { key } /> }
+            children = { ['',...object[key]].map( e => <option key = { e } value = { e }>{ e }</option>) }
+          />
         </FormControl>
       )
     )
@@ -206,52 +206,52 @@ class Detail extends Component {
   renderContent(){
     return(
       <MuiThemeProvider theme = { theme }>
-			<div className = { this.classes.container }>
-				<div className = { this.classes.media }>
-					<img 
-						className = { this.classes.image } 
-						alt = { this.props.product.title } 
-						src = { serverURL(this.props.product.images [0].url) }
-					/>
-				</div>
-				<div className = { this.classes.details } >
-					<CardContent>
-						<Typography 
-							type = "headline" 
-							component = "h1" 
-							children = { this.props.product.title }
-						/>
-						<Typography 
-							className = { this.classes.price } 
-							type = "subheading" 
-							component = "div" 
-							children = { '₴' + this.props.product.price }
-						/>
-						{ this.renderSelect(this.props.product.sizes) }
-						<div className = { this.classes.description }>
-							<Typography 
-								className = { this.classes.title } 
-								type = "body2" 
-								component = "h3" 
-								children = { 'Description' }
-							/>
-							<Typography 
-								type = "caption" 
-								component = "p" 
-								children = { this.props.product.description }
-							/>
-						</div>	
-					</CardContent>
-					<CardActions className = { this.classes.actions }>
-						<Button 
-							className = { this.classes.button } 
-							text = "Add to cart" 
-							click = { () => this.handleAddLineItem(this.props.product) }
-						/>
-					</CardActions>  
-				</div> 
-			</div>	
-			</MuiThemeProvider >  
+        <div className = { this.classes.container }>
+          <div className = { this.classes.media }>
+            <img
+              className = { this.classes.image }
+              alt = { this.props.product.title }
+              src = { serverURL(this.props.product.images[0].url) }
+            />
+          </div>
+          <div className = { this.classes.details } >
+            <CardContent>
+              <Typography
+                type = "headline"
+                component = "h1"
+                children = { this.props.product.title }
+              />
+              <Typography
+                className = { this.classes.price }
+                type = "subheading"
+                component = "div"
+                children = { '₴' + this.props.product.price }
+              />
+              { this.renderSelect(this.props.product.sizes) }
+              <div className = { this.classes.description }>
+                <Typography
+                  className = { this.classes.title }
+                  type = "body2"
+                  component = "h3"
+                  children = { 'Description' }
+                />
+                <Typography
+                  type = "caption"
+                  component = "p"
+                  children = { this.props.product.description }
+                />
+              </div>
+            </CardContent>
+            <CardActions className = { this.classes.actions }>
+              <Button
+                className = { this.classes.button }
+                text = "Add to cart"
+                click = { () => this.handleAddLineItem(this.props.product) }
+              />
+            </CardActions>
+          </div>
+        </div>
+      </MuiThemeProvider>
     )
   }
 
@@ -263,8 +263,8 @@ class Detail extends Component {
         { this.props.error && this.renderError()  }
         { this.props.loaded && this.renderContent()  }
       </div>
-    )    
-  }  
+    )
+  }
 }
 
 Detail.propTypes = {
@@ -273,7 +273,7 @@ Detail.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    locale: state.uiState.locale, 
+    locale: state.uiState.locale,
     categories: state.categories.data,
     categorySlug: state.detail.categorySlug,
     product: state.detail.product,

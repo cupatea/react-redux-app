@@ -16,7 +16,7 @@ const styles = theme => ({
     minHeith: '24px',
   },
   menuItem: {
-    textTransform: 'uppercase',	
+    textTransform: 'uppercase',
     fontSize: '0.875rem',
   }
 })
@@ -36,29 +36,29 @@ handleMenuClose = () => {
 }
 
 renderTargetButton(currentValue, action) {
-	return(
+  return(
     <Target>
-      <Button 
+      <Button
         className = { this.props.classes.button }
         aria-owns = { this.state.isMenuOpen ? 'menu-list' : null }
         aria-haspopup = "true"
-				onClick = { this.handleMenuOpen }
-				children = { [ currentValue, <ArrowDropDown/> ] }
+        onClick = { this.handleMenuOpen }
+        children = { [ currentValue, <ArrowDropDown/> ] }
       />
-    </Target> 
+    </Target>
   )
-}      
+}
 
 renderList (inputItems, inputAction) {
-  const items = inputItems.map(item => 
-		<MenuItem 
-			key = { item } 
-			className = { this.props.classes.menuItem } 
-			onClick = { () => inputAction(item) }
-			children = { item }
-		/>
-	)
-  return <Paper children = { <MenuList role = "menu" children = { items }/> }/>  
+  const items = inputItems.map(item =>
+    <MenuItem
+      key = { item }
+      className = { this.props.classes.menuItem }
+      onClick = { () => inputAction(item) }
+      children = { item }
+    />
+  )
+  return <Paper children = { <MenuList role = "menu" children = { items }/> }/>
 }
 render(){
   return (
@@ -66,11 +66,11 @@ render(){
       { this.renderTargetButton(this.props.currentLang) }
       <Popper placement = "bottom-start" eventsEnabled = { this.state.isMenuOpen }>
         <ClickAwayListener onClickAway = { this.handleMenuClose } >
-					<Grow 
-						in = { this.state.isMenuOpen } 
-						id = "menu-list" 
-						children = { this.renderList(this.props.list, this.props.action)  }
-					/>
+          <Grow
+            in = { this.state.isMenuOpen }
+            id = "menu-list"
+            children = { this.renderList(this.props.list, this.props.action)  }
+          />
         </ClickAwayListener>  
       </Popper>
     </Manager>
@@ -80,8 +80,8 @@ render(){
 }
 DropdownMenu.propTypes = {
   classes: PropTypes.object.isRequired,
-  list: PropTypes.array.isRequired, 
-  action: PropTypes.func.isRequired, 
+  list: PropTypes.array.isRequired,
+  action: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(DropdownMenu)

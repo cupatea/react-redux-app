@@ -7,10 +7,10 @@ import detail from './detail'
 import cart from './cart'
 
 export default combineReducers({
-	uiState,
-	categories,
-	products,
-	detail,
-	cart,
-	router: routerReducer
+  uiState,
+  categories,
+  products,
+  detail,
+  cart,
+  router: routerReducer
 })

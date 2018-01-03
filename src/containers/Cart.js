@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { 
-  initCategories, 
-  removeLineItem, 
+import {
+  initCategories,
+  removeLineItem,
   incrementLineItemQuantity,
-  decrementLineItemQuantity, 
-  updateTotalPrice, 
+  decrementLineItemQuantity,
+  updateTotalPrice,
   updateQuantityCounter }  from '../actions'
 import { push } from 'react-router-redux'
 import compose from 'recompose/compose'
@@ -14,7 +14,7 @@ import { MuiThemeProvider } from 'material-ui/styles'
 import theme from '../config/theme'
 import { withStyles } from 'material-ui/styles'
 import { CircularProgress } from 'material-ui/Progress'
-// import { serverURL } from '../config/pathHelper' 
+// import { serverURL } from '../config/pathHelper'
 import LineItem from '../components/LineItem'
 import Button from '../components/Button'
 import Typography from 'material-ui/Typography'
@@ -65,8 +65,8 @@ class Cart extends Component{
   componentWillMount() {
     this.props.onInitCategories(this.props.locale)
   }
-  componentWillReceiveProps(nextProps) { 
-    if (nextProps.locale !== this.props.locale) 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.locale !== this.props.locale)
       this.props.onInitCategories(nextProps.locale)
   }
 
@@ -87,7 +87,7 @@ class Cart extends Component{
     this.props.updateQuantityCounter()
     this.props.updateTotalPrice()
   }
-  
+
   renderError(){
     console.log("Error! Can't fetch cart from the server")
   }
@@ -97,28 +97,28 @@ class Cart extends Component{
   renderLineItems(lineItems){
     return(
       lineItems.map(lineItem =>
-        <LineItem  
+        <LineItem
           key = { lineItem.product.id + Object.entries(lineItem.product.sizes).join("-")}
           image = { lineItem.product.images[0].url }
           title = { lineItem.product.title }
           currentQuantity = { lineItem.quantity }
           handleChange = { () => {} }
-          sizes = { lineItem.product.sizes } 
+          sizes = { lineItem.product.sizes }
           price = { lineItem.product.price }
           handleDelete = { () => this.handleRemoveLineItem(lineItem) }
           handleIncrement = { () => this.handleIncrementLineItemQuantity(lineItem) }
           handleDecrement = { () => this.handleDecrementLineItemQuantity(lineItem) }
         />
       )
-    )  
+    )
   }
   renderEmptyCartMessage(){
     return(
-			<Typography 
-				type = 'caption' 
-				component = 'p'
-				children = { [ 'Your',<ShoppingCartIcon/>, ' is empty.' ] }
-			/>
+      <Typography
+        type = 'caption'
+        component = 'p'
+        children = { [ 'Your',<ShoppingCartIcon/>, ' is empty.' ] }
+      />
     )
   }
 
@@ -126,23 +126,23 @@ class Cart extends Component{
     return(
       <div className = { this.classes.checkoutBox }>
       <div className = { this.classes.total }>
-				<Typography 
-					type = 'body2' 
-					component = 'p'
-					children = { "Total:" } 
-				/>
-				<Typography 
-					className = { this.classes.subtotal } 
-					type = 'body2'
-					component = 'span'
-					children = { '$' + this.props.totalPrice } 
-				/>
+        <Typography
+          type = 'body2'
+          component = 'p'
+          children = { "Total:" }
+        />
+        <Typography
+          className = { this.classes.subtotal }
+          type = 'body2'
+          component = 'span'
+          children = { '$' + this.props.totalPrice }
+        />
       </div>
-			<div 
-				className = { this.classes.button }
-				children = { <Button text = 'Checkout'/> } 
-			/>
-    </div> 
+      <div
+        className = { this.classes.button }
+        children = { <Button text = 'Checkout'/> }
+      />
+    </div>
     )
   }
   renderContentContainer(lineItems){
@@ -157,15 +157,15 @@ class Cart extends Component{
     return (
       <MuiThemeProvider theme = { theme }>
         <ScrollToTopOnMount />
-        <div className = {this.classes.root }> 
+        <div className = {this.classes.root }>
             { this.props.loading && this.renderLoading() }
             { this.props.error && this.renderError() }
             { !this.props.lineItems.length && this.renderEmptyCartMessage() }
             { this.props.lineItems.length > 0 && this.renderContentContainer(this.props.lineItems) }
-        </div>  
+        </div>
       </MuiThemeProvider>
     )
-  }    
+  }
 }
 
 

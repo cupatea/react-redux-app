@@ -13,17 +13,17 @@ import Cart from '../containers/Cart'
 
 
 const routes = () =>
-	<Provider store = { store } >  
-		<ConnectedRouter history = { history }>
-			<App>
-				<Switch>
-					<Route exact path = { '/' } component = { Categories }/>
-					<Route exact path = { '/list/:slug' } component = { Products } />
-					<Route exact path = { '/detail/:slug/:id' } component = { Detail } />
-					<Route exact path = { '/cart' } component = { Cart } />
-				</Switch> 
-			</App> 
-		</ConnectedRouter >
-	</Provider>
+  <Provider store = { store } >
+    <ConnectedRouter history = { history }>
+      <App>
+        <Switch>
+          <Route exact path = { '/' } component = { Categories }/>
+          <Route exact path = { '/list/:slug' } component = { Products } />
+          <Route exact path = { '/detail/:slug/:id' } component = { Detail } />
+          <Route exact path = { '/cart' } component = { Cart } />
+        </Switch>
+      </App>
+    </ConnectedRouter>
+  </Provider>
 
 export default routes

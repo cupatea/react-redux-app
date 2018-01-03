@@ -1,12 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import  { initCategories, initDetail }  from '../actions'
+import  { 
+	initCategories, 
+	initDetail, 
+	addLineItem, 
+	updateQuantityCounter, 
+	updateTotalPrice 
+}  from '../actions'
 import { serverURL } from '../config/pathHelper' 
-
+import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
 import { MuiThemeProvider } from 'material-ui/styles'
+import withWidth from 'material-ui/utils/withWidth'
 import theme from '../config/theme'
 import { withStyles } from 'material-ui/styles'
-import Grid from 'material-ui/Grid'
 import { CardActions, CardContent } from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
 import { CircularProgress } from 'material-ui/Progress'
@@ -14,159 +21,237 @@ import Input, { InputLabel } from 'material-ui/Input'
 import { FormControl } from 'material-ui/Form'
 import Select from 'material-ui/Select'
 import Button from '../components/Button'
-import PropTypes from 'prop-types'
-
 import ScrollToTopOnMount from './ScrollToTopOnMount'
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    justifyContent: 'center',
-    paddingTop: '20px',
-    margin: '0 16px',
+		display: 'flex',
+		justifyContent: 'center',
   },
   container: {
-    maxWidth: 1440,
-  },
-  media: {
+		display: 'flex',
+		maxWidth: '1440px',
+		[theme.breakpoints.up('md')]: {
+			justifyContent: 'center',
+			flexDirection: 'row',
+		},
+		[theme.breakpoints.down('md')]: {
+			flexDirection: 'column',
+			alignItems: 'center',
+		},
+	},
+	media:{
+		maxWidth: '600px',
+		[theme.breakpoints.up('md')]: {
+			width: '50%',	
+			margin: '64px 32px',
+		},
+		[theme.breakpoints.down('md')]: {
+			margin: '0px',
+			width: '80%',
+		},
+	},
+	image: {
     justifySelf: 'center',
     height: 'auto',
     width: '100%',
   },
-  content:{
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: '8px',
+	details:{
+		[theme.breakpoints.up('md')]: {
+			margin: '64px 32px',
+			width: '50%',
+			maxWidth: '400px'
+		},
+		[theme.breakpoints.down('md')]: {
+			boxSizing: 'border-box',
+			margin: '32px',
+			padding: '0 24px',
+			width: '100%',
+			maxWidth: '600px',
+		},	
+	},
+	price: {
+		margin: '16px 0 20px',
+		color: '#757575'
+	},
+	description:{
+		margin: '32px 0',
+	},
+	title: {
+		marginBottom: '16px'
+	},
+	inputLable: {
+    textTransform: 'capitalize'
   },
   actions:{
     display: 'flex',
-    justifyContent: 'flex-start',
+		justifyContent: 'flex-start',
     marginTop: '8px',
-    padding: '0 16px',
+		padding: '0 16px',
+		[theme.breakpoints.down('sm')]: {
+			justifyContent: 'center',
+		}	
   },
-  headline: {
-    justifySelf: 'start',
-    fontSize: '24px',
-    color: '#202020',
-    fontWeight: 500,
-  },
-  title: {
-    justifySelf: 'start',
-    fontSize: '16px',
-    marginTop: '24px',
-    marginBottom: '12px',
-    color: '#202020',
-    fontWeight: 500,
-    
-  },
-  price:{
-    justifySelf: 'start',
-    marginTop: '12px',
-    marginBottom: '24px',
-    fontSize: '16px',
-    fontWeight: 400,
-  },
-  description:{
-    justifySelf: 'start',
-    marginBottom: '24px',
-    fontSize: '13px',
-    fontWeight: 400,
-  },
-  button: {
-    justifySelf: 'end',
-  },
-  errorMessage: {
-    textAlign: 'center',
-    fontFamily: 'Roboto'
-  },
-  progress: {
-    justifySelf: 'center',
-    margin: `0 ${theme.spacing.unit * 2}px`,
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
-  },
-  inputLable: {
-    textTransform: 'capitalize'
-  },
-  selectWrapper: {
-    width: '100%'
-  }
 })
 
 class Detail extends Component {
-  classes =  this.props.classes
+  constructor(props) {
+    super(props)
+    this.state = { 
+      stateInitiated: false,
+      changeHandeled: {},
+      selectedSizes: {}, 
+    }
+  }
 
+  classes =  this.props.classes
   componentWillMount() {
-    if (!this.props.categories.length){
+    if (!this.props.categories.length)
       this.props.onInitCategories(this.props.locale)
-    } 
     this.props.onInitDetail(this.props.locale, this.props.match.params.id)
   }
 
   componentWillReceiveProps(nextProps) { 
-    if ( nextProps.locale !== this.props.locale) {
+    if ( nextProps.locale !== this.props.locale)
       this.props.onInitDetail(nextProps.locale, nextProps.match.params.id)
-    }
   }
-
-  state = {
-    age: '',
-    name: 'hai',
+  componentWillUpdate(nextProps, nextState){
+    //initiate selectedSizes object unless it's initiated
+    if (nextProps.loaded && !nextState.stateInitiated){
+      const keys = Object.keys(nextProps.product.sizes) 
+      this.setState({
+        selectedSizes:  this.createInitialObject('', keys),
+        changeHandeled: this.createInitialObject(false, keys),
+        stateInitiated: true,
+      }) 
+    } 
   }
 
   handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ 
+      selectedSizes: {
+        ...this.state.selectedSizes,
+        [event.target.name]: event.target.value 
+      },
+      changeHandeled: {
+        ...this.state.changeHandeled,
+        [event.target.name]: true
+      }
+    })
+  }
+
+  createInitialObject = (initialValue, keysArray) => {
+    const initObject = {}
+    keysArray.map(key => initObject[key] = initialValue) 
+    return initObject
+  } 
+
+  checkValues = (keysArray, targetObject) => {
+    return keysArray.reduce((acc, key) => {
+      return targetObject[key] ? targetObject[key] && acc : false
+    }, true)
+  }
+
+  handleAddLineItem = (product) => {
+    const keysArray = Object.keys(product.sizes)
+    this.setState({
+      changeHandeled: this.createInitialObject(true, keysArray),
+      stateInitiated: true,
+    }) 
+    if (this.checkValues(keysArray,this.state.selectedSizes)){
+      this.props.addLineItem({
+        product:{
+          ...product, 
+          sizes: this.state.selectedSizes
+        },
+        quantity: 1,  
+      })
+      this.props.updateQuantityCounter()
+      this.props.updateTotalPrice()
+    }
   }
 
   renderError(){
-    return <p className = {this.classes.errorMessage}>Error! Can't fetch details from the server</p>
+    console.log("Error! Can't fetch details from the server")
   }
   renderLoading(){
-    return <CircularProgress className = { this.classes.progress } size = { 50 } color = "accent" />
+    return <CircularProgress size = { 50 } color = "accent" />
   }
 
   renderSelect(object){
     return(
       Object.keys(object).map( key => 
-        <FormControl className = { this.classes.formControl }>
-          <InputLabel className = { this.classes.inputLable } htmlFor = { key }>
-            { key }
-          </InputLabel>
-          <Select native onChange = { this.handleChange } input = { <Input name = { key } id = { key } /> }>
-            { object[key].map( e => <option value = { e }>{ e }</option>) }
-          </Select>
+				<FormControl 
+					fullWidth
+					key = { key } 
+					error = { this.state.changeHandeled[key] && !this.state.selectedSizes[key] }
+				>
+					<InputLabel 
+						className = { this.classes.inputLable } 
+						htmlFor = { key }
+						children = { key + ' size'}
+					/>
+					<Select 
+						native
+						value = { this.state.selectedSizes[key]  }  
+						onChange = { this.handleChange } 
+						input = { <Input name = { key } id = { key } /> }
+						children = { ['',...object[key]].map( e => <option key = { e } value = { e }>{ e }</option>) }
+					/>
         </FormControl>
       )
     )
   }
 
-  
-
-  renderDetail(){
+  renderContent(){
     return(
       <MuiThemeProvider theme = { theme }>
-        <Grid className = { this.classes.container } container spacing = { 24 }>
-            <Grid className = { this.classes.container } item xs = { 12 } sm = { 6 } md = { 6 } lg = { 6 }>
-              <img className = { this.classes.media } alt = { this.props.product.title } src = { serverURL(this.props.product.images[0].url) }/>
-            </Grid>
-            <Grid className = { this.classes.container } item xs = { 12 } sm = { 6 } md = { 6 } lg = { 6 }>
-              <CardContent className = { this.classes.content }>
-                <Typography className = { this.classes.headline }type = "headline" component = "h1">{this.props.product.title}</Typography>
-                <Typography className = { this.classes.price }type = "title" component = "h2">₴{this.props.product.price}</Typography>
-                { this.renderSelect(this.props.product.sizes) }
-                <Typography className = { this.classes.title }type = "title" component = "h2">Description</Typography>
-                <Typography className = { this.classes.description }type = "body2" component = "p">{ this.props.product.description }</Typography>
-              </CardContent>
-              <CardActions className = { this.classes.actions }>
-                <Button className = { this.classes.button } text = "Add to cart"/>
-              </CardActions>  
-            </Grid>
-          </Grid>  
-        </MuiThemeProvider >  
+			<div className = { this.classes.container }>
+				<div className = { this.classes.media }>
+					<img 
+						className = { this.classes.image } 
+						alt = { this.props.product.title } 
+						src = { serverURL(this.props.product.images [0].url) }
+					/>
+				</div>
+				<div className = { this.classes.details } >
+					<CardContent>
+						<Typography 
+							type = "headline" 
+							component = "h1" 
+							children = { this.props.product.title }
+						/>
+						<Typography 
+							className = { this.classes.price } 
+							type = "subheading" 
+							component = "div" 
+							children = { '₴' + this.props.product.price }
+						/>
+						{ this.renderSelect(this.props.product.sizes) }
+						<div className = { this.classes.description }>
+							<Typography 
+								className = { this.classes.title } 
+								type = "body2" 
+								component = "h3" 
+								children = { 'Description' }
+							/>
+							<Typography 
+								type = "caption" 
+								component = "p" 
+								children = { this.props.product.description }
+							/>
+						</div>	
+					</CardContent>
+					<CardActions className = { this.classes.actions }>
+						<Button 
+							className = { this.classes.button } 
+							text = "Add to cart" 
+							click = { () => this.handleAddLineItem(this.props.product) }
+						/>
+					</CardActions>  
+				</div> 
+			</div>	
+			</MuiThemeProvider >  
     )
   }
 
@@ -176,7 +261,7 @@ class Detail extends Component {
         <ScrollToTopOnMount />
         { this.props.loading && this.renderLoading()  }
         { this.props.error && this.renderError()  }
-        { this.props.loaded && this.renderDetail()  }
+        { this.props.loaded && this.renderContent()  }
       </div>
     )    
   }  
@@ -201,6 +286,9 @@ const mapDispachToProps = dispatch => {
   return {
     onInitCategories: (locale) => dispatch(initCategories(locale)),
     onInitDetail: (locale, id) => dispatch(initDetail(locale, id)),
+    addLineItem: (lineItem) => dispatch(addLineItem(lineItem)),
+    updateQuantityCounter: () => dispatch(updateQuantityCounter()),
+    updateTotalPrice: () => dispatch(updateTotalPrice())
   }
 }
-export default withStyles(styles)(connect(mapStateToProps,mapDispachToProps)(Detail))
+export default compose(withStyles(styles), withWidth())(connect(mapStateToProps,mapDispachToProps)(Detail))

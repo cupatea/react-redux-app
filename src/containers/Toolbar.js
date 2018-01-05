@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { selectLanguage, initUiState, initCategories, initProducts } from '../actions'
 import PropTypes from 'prop-types'
-import { productsPath, cartPath } from '../config/pathHelper'
+import { productsPath, cartPath, rootPath } from '../config/router'
 
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
@@ -98,7 +98,7 @@ class Toolbar extends Component {
           onClick = { this.toggleDrawer(true) }
           children = { <MenuIcon /> }
         />
-      </Hidden >
+      </Hidden>
     )
   }
 
@@ -110,13 +110,13 @@ class Toolbar extends Component {
         list   = { this.props.locales }
         action = { this.props.handleLocaleChange }
       />
-    </Hidden >
+    </Hidden>
     )
   }
 
   renderAppLogo(longName, shortName, action){
     const returnLogo = ( name ) =>
-      <ButtonBase className = { this.props.classes.logoButton } onClick = { () => this.props.handleLocationChange('/') }>
+      <ButtonBase className = { this.props.classes.logoButton } onClick = { () => this.props.handleLocationChange(rootPath()) }>
         <Typography className = { this.props.classes.name } children = { name } />
       </ButtonBase>
     return(

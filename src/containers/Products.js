@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { detailPath, serverURL } from '../config/pathHelper'
+import { serverURL } from '../config/api'
+import { detailPath } from '../config/router'
 import { initProducts, initCategories } from '../actions'
 import { push } from 'react-router-redux'
 

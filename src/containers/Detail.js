@@ -7,7 +7,7 @@ import  {
   updateQuantityCounter,
   updateTotalPrice
 }  from '../actions'
-import { serverURL } from '../config/pathHelper'
+import { serverURL } from '../config/api'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
 import { MuiThemeProvider } from 'material-ui/styles'

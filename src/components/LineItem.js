@@ -8,7 +8,7 @@ import Close from 'material-ui-icons/Close'
 import Add from 'material-ui-icons/AddCircleOutline'
 import Remove from 'material-ui-icons/RemoveCircleOutline'
 import Typography from 'material-ui/Typography'
-import { serverURL }  from '../config/pathHelper'
+import { serverURL }  from '../config/api'
 
 const styles = theme => ({
   root: {

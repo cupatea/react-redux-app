@@ -1,27 +1,27 @@
 import * as creators from './creators'
-import axios  from '../config/axios'
+import api, { UiPath, categoriesPath , productsPath, detailPath }  from '../config/api'
 
 export const selectLanguage = (locale) =>
   creators.selectLanguage(locale)
 
 export const initUiState = (locale ) =>
   creators.initUiState(
-    axios.get(`${locale ? locale + '/' : '/'}api/v1/store`)
+    api.get(UiPath(locale))
   )
 
 export const initCategories = (locale) =>
   creators.initCategories(
-    axios.get(`${locale ? locale + '/' : '/'}api/v1/categories`)
+    api.get(categoriesPath(locale))
   )
 
 export const initProducts = (locale, slug) =>
   creators.initProducts(
-    axios.get(`${locale ? locale + '/' : '/'}api/v1/products?category=${slug}`)
+    api.get(productsPath(slug,locale))
   )
 
 export const initDetail = (locale, id) =>
   creators.initDetail(
-    axios.get(`${locale ? locale + '/' : '/'}api/v1/products/${id}`)
+    api.get(detailPath(id,locale))
   )
 
 export const addLineItem = (lineItem) =>

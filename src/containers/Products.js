@@ -4,7 +4,6 @@ import { serverURL } from '../config/api'
 import { detailPath } from '../config/router'
 import { initProducts, initCategories } from '../actions'
 import { push } from 'react-router-redux'
-
 import { withStyles } from 'material-ui/styles'
 import Grid from 'material-ui/Grid'
 import PropTypes from 'prop-types'
@@ -48,11 +47,14 @@ class Products extends Component {
   }
 
   renderCategory({ title, image, slug }, itemsCount){
+    const item = this.props.messages.item
+    const word = itemsCount === 0 || itemsCount > 4 ?
+      item.many : (itemsCount === 1 ? item.one : item.few)
     return(
       <Category
         title = { title }
         image = { serverURL(image.url)}
-        info  = { itemsCount + ' items' }
+        info  = { `${itemsCount} ${word}` }
         path  = { slug }
       />
     )
@@ -64,6 +66,7 @@ class Products extends Component {
         title = { title }
         image = { serverURL(images[0].url) }
         price = { price }
+        currency = { this.props.messages.currency }
       />
     )
   }
@@ -119,6 +122,7 @@ Products.propTypes = {
 const mapStateToProps = state => {
   return {
     locale: state.uiState.locale,
+    messages: state.uiState.messages,
     categories: state.categories.data,
     products: state.products.products,
     category: state.products.category,

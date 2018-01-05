@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { selectLanguage, initUiState, initCategories, initProducts } from '../actions'
+import { selectLanguage, initCategories, initProducts } from '../actions'
 import PropTypes from 'prop-types'
 import { productsPath, cartPath, rootPath } from '../config/router'
 
@@ -58,7 +58,6 @@ const styles = theme => ({
 
 class Toolbar extends Component {
   componentWillMount() {
-    this.props.initUiState()
     this.props.onInitCategories(this.props.locale)
   }
   state = {
@@ -128,27 +127,27 @@ class Toolbar extends Component {
   }
 
   renderDrawerContent(){
-    const items = {
-      category: this.props.categories.map(c => ({
-        title: c.title,
-        path: productsPath(c.slug),
-        action: this.props.handleLocationChange,
-      })),
-      language: this.props.locales.map(l =>({
-        title: l,
-        path: l,
-        action: this.props.handleLocaleChange
-      }))
-    }
-    const points = this.props.drawerPoints
+    const categories = this.props.categories.map(c => ({
+      title: c.title,
+      path: productsPath(c.slug),
+      action: this.props.handleLocationChange,
+    }))
+    const languages = this.props.locales.map(l =>({
+      title: l.toUpperCase(),
+      path: l,
+      action: this.props.handleLocaleChange
+    }))
 
-    return(
-      Object.keys(points)
-        .map(key => ({
-          headline: points[key],
-          items: items[key],
-      }))
-    )
+    return([
+      {
+        headline: this.props.categoriesTitle,
+        items: categories,
+      },
+      {
+        headline: this.props.languagesTitle,
+        items: languages,
+      },
+    ])
   }
 
   renderDrawer(){
@@ -183,14 +182,14 @@ const mapStateToProps = state => {
     locales: state.uiState.locales,
     appName: state.uiState.appName,
     shortName: state.uiState.shortName,
-    drawerPoints: state.uiState.drawerPoints,
+    categoriesTitle: state.uiState.messages.categories,
+    languagesTitle: state.uiState.messages.languages,
     router: state.router,
   }
 }
 
 const mapDispachToProps = dispatch => {
   return {
-    initUiState: (locale) => dispatch(initUiState(locale)),
     onInitCategories: (locale) => dispatch(initCategories(locale)),
     onInitProducts: (locale) => dispatch(initProducts(locale)),
     handleLocaleChange: (locale) => dispatch(selectLanguage(locale)),

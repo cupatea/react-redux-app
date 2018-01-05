@@ -117,8 +117,8 @@ const styles = theme => ({
 
   },
   deleteButton:{
-    width: '30px',
-    height: '30px',
+    width: '18px',
+    height: '18px',
     position: 'absolute',
     top: '24px',
     right: '0',
@@ -136,7 +136,7 @@ const styles = theme => ({
 
 })
 
-const LineItem = ({ classes, image, title, currentQuantity, sizes, price, handleDelete, handleIncrement, handleDecrement }) =>(
+const LineItem = ({ classes, image, title, currentQuantity, sizes, currency, price, handleDelete, handleIncrement, handleDecrement }) =>(
   <div className = { classes.root }>
     <img
       className = { classes.image}
@@ -170,12 +170,12 @@ const LineItem = ({ classes, image, title, currentQuantity, sizes, price, handle
                 key = { size[0] }
                 className = { classes.size }
                 type = 'caption'
-                children = { size.join(' size: ') }
+                children = { size[1] }
               />
             )
           }
         </div>
-        <div className = { classes.price }><Typography type = 'caption' children = { '$' + price }/></div>
+        <div className = { classes.price }><Typography type = 'caption' children = { currency + price }/></div>
       </div>
     </div>
     <IconButton className = { classes.deleteButton } aria-label = "Close" onClick = { () => handleDelete() }>

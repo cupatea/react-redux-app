@@ -37,7 +37,7 @@ const styles = {
   }
 }
 
-const Product = ({ classes, image, title, price}) =>
+const Product = ({ classes, image, title, price, currency }) =>
   <div className = { classes.root }>
     <Card className = { classes.card }>
       <CardMedia
@@ -57,7 +57,7 @@ const Product = ({ classes, image, title, price}) =>
         className = { classes.price }
         type = 'title'
         component = 'span'
-        children = { '₴' + price }
+        children = { currency + price }
       />
     </Card>
   </div>
@@ -67,6 +67,7 @@ Product.propTypes = {
   title: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
+  currency: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles)(Product)

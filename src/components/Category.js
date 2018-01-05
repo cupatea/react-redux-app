@@ -54,9 +54,10 @@ const Category = ({ classes, info, buttonText, path, image, title, linkTo })  =>
       />
     </CardActions>
   const renderInfo = () =>
-    <Typography className = { classes.info } >
-      { info }
-    </Typography>
+    <Typography
+      className = { classes.info }
+      children = { info }
+    />
 
   return (
     <div className = { classes.root }>

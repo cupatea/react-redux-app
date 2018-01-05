@@ -43,7 +43,7 @@ class Categories extends Component{
         image       = { serverURL(image.url) }
         path        = { productsPath(slug) }
         linkTo      = { this.props.handleLocationChange }
-        buttonText  = { this.props.actionButtonText }
+        buttonText  = { this.props.messages.actionButtonText }
       />
     )
   }
@@ -54,7 +54,7 @@ class Categories extends Component{
     return <CircularProgress className = { this.classes.progress } size = { 50 } color = "accent" />
   }
   renderFooter(){
-    return <Footer text = { this.props.footerButtonText } />
+    return <Footer text = { this.props.messages.footerButtonText } />
   }
   renderContentContainer(categories){
     return(
@@ -79,9 +79,8 @@ class Categories extends Component{
 const mapStateToProps = state => {
   return {
     locale: state.uiState.locale,
+    messages: state.uiState.messages,
     categories: state.categories.data,
-    actionButtonText: state.uiState.actionButtonText,
-    footerButtonText: state.uiState.footerButtonText,
     error: state.categories.error,
     loading: state.categories.loading,
     loaded: state.categories.loaded

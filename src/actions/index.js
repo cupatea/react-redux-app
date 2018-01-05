@@ -1,13 +1,8 @@
 import * as creators from './creators'
-import api, { UiPath, categoriesPath , productsPath, detailPath }  from '../config/api'
+import api, { categoriesPath , productsPath, detailPath }  from '../config/api'
 
 export const selectLanguage = (locale) =>
   creators.selectLanguage(locale)
-
-export const initUiState = (locale ) =>
-  creators.initUiState(
-    api.get(UiPath(locale))
-  )
 
 export const initCategories = (locale) =>
   creators.initCategories(

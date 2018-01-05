@@ -189,7 +189,7 @@ class Detail extends Component {
           <InputLabel
             className = { this.classes.inputLable }
             htmlFor = { key }
-            children = { key + ' size'}
+            children = { this.props.messages.sizes[key]}
           />
           <Select
             native
@@ -225,7 +225,7 @@ class Detail extends Component {
                 className = { this.classes.price }
                 type = "subheading"
                 component = "div"
-                children = { '₴' + this.props.product.price }
+                children = { this.props.messages.currency + this.props.product.price }
               />
               { this.renderSelect(this.props.product.sizes) }
               <div className = { this.classes.description }>
@@ -233,7 +233,7 @@ class Detail extends Component {
                   className = { this.classes.title }
                   type = "body2"
                   component = "h3"
-                  children = { 'Description' }
+                  children = { this.props.messages.description }
                 />
                 <Typography
                   type = "caption"
@@ -245,7 +245,7 @@ class Detail extends Component {
             <CardActions className = { this.classes.actions }>
               <Button
                 className = { this.classes.button }
-                text = "Add to cart"
+                text = { this.props.messages.addToCart }
                 click = { () => this.handleAddLineItem(this.props.product) }
               />
             </CardActions>
@@ -274,6 +274,7 @@ Detail.propTypes = {
 const mapStateToProps = state => {
   return {
     locale: state.uiState.locale,
+    messages: state.uiState.messages,
     categories: state.categories.data,
     categorySlug: state.detail.categorySlug,
     product: state.detail.product,

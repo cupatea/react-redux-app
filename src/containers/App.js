@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { withRouter } from 'react-router'
-import { initUiState, initCategories, initProducts } from '../actions'
+import { cartPath } from '../config/router'
+import { initCategories, initProducts } from '../actions'
 import { productsPath } from '../config/router'
 import { withStyles } from 'material-ui/styles'
 import Toolbar from './Toolbar'
@@ -26,15 +27,10 @@ const styles = theme => ({
 })
 
 class App extends Component {
-  componentWillMount() {
-    this.props.initUiState()
-  }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.locale !== this.props.locale) {
-      this.props.initUiState(nextProps.locale)
+    if (nextProps.locale !== this.props.locale)
       this.props.onInitCategories(nextProps.locale)
-    }
   }
 
   handleCategoryChange = (slug) =>
@@ -63,7 +59,7 @@ class App extends Component {
     return(
       <div>
         { this.renderToolbar() }
-        { this.renderTabs() }
+        { this.props.router.location.pathname != cartPath() && this.renderTabs() }
         { this.props.error && this.renderError() }
         { this.props.children }
       </div>
@@ -75,16 +71,12 @@ const mapStateToProps = state => {
   return {
     categories: state.categories.data,
     locale: state.uiState.locale,
-    loading: state.uiState.loading,
-    loaded: state.uiState.loaded,
-    error: state.uiState.error,
     router: state.router,
   }
 }
 
 const mapDispachToProps = dispatch => {
   return {
-    initUiState:  (locale) => dispatch(initUiState(locale)),
     onInitCategories:  (locale) => dispatch(initCategories(locale)),
     onInitProducts:  (locale)  => dispatch(initProducts(locale)),
     handleLocationChange:  (path) => dispatch(push(path))

@@ -1,9 +1,5 @@
 import * as types from './types'
 
-export const initUiState = (state) => ({
-  type: types.FETCH_UI_STATE,
-  payload: state
-})
 export const selectLanguage = (locale) => ({
   type: types.SET_LANGUAGE,
   payload: locale

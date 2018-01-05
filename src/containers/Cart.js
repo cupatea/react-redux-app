@@ -56,6 +56,16 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  title: {
+    textAlign: 'center',
+    fontSize: '16.9px',
+    fontWeight: 500,
+  },
+  info: {
+    alignSelf: 'center',
+    fontSize: '13px',
+    fontWeight: 400,
+  },
 })
 
 class Cart extends Component{
@@ -103,6 +113,7 @@ class Cart extends Component{
           currentQuantity = { lineItem.quantity }
           handleChange = { () => {} }
           sizes = { lineItem.product.sizes }
+          currency = { this.props.messages.currency }
           price = { lineItem.product.price }
           handleDelete = { () => this.handleRemoveLineItem(lineItem) }
           handleIncrement = { () => this.handleIncrementLineItemQuantity(lineItem) }
@@ -116,7 +127,7 @@ class Cart extends Component{
       <Typography
         type = 'caption'
         component = 'p'
-        children = { [ 'Your',<ShoppingCartIcon/>, ' is empty.' ] }
+        children = { [ this.props.messages.your,<ShoppingCartIcon/>, this.props.messages.isEmpty ] }
       />
     )
   }
@@ -128,25 +139,35 @@ class Cart extends Component{
         <Typography
           type = 'body2'
           component = 'p'
-          children = { "Total:" }
+          children = { `${this.props.messages.total}:` }
         />
         <Typography
           className = { this.classes.subtotal }
           type = 'body2'
           component = 'span'
-          children = { '$' + this.props.totalPrice }
+          children = { this.props.messages.currency + this.props.totalPrice }
         />
       </div>
       <div
         className = { this.classes.button }
-        children = { <Button text = 'Checkout'/> }
+        children = { <Button text = { this.props.messages.checkout }/> }
       />
     </div>
     )
   }
   renderContentContainer(lineItems){
+    const count = this.props.lineItems.length
+    const item = this.props.messages.item
+    const word = count === 1 ?  item.one : (count > 4 ? item.many : item.few)
     return(
       <div className = { this.classes.container }>
+        <Typography
+          className = { this.classes.title }
+          children = { this.props.messages.cart } />
+        <Typography
+          className = { this.classes.info }
+          children = { `${count} ${word}`}
+        />
         { this.renderLineItems(lineItems) }
         { this.renderCheckBox() }
       </div>
@@ -171,6 +192,7 @@ class Cart extends Component{
 const mapStateToProps = state => {
   return {
     locale: state.uiState.locale,
+    messages: state.uiState.messages,
     categories: state.categories.data,
     lineItems: state.cart.lineItems,
     totalPrice: state.cart.totalPrice,

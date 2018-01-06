@@ -8,7 +8,7 @@ import Close from 'material-ui-icons/Close'
 import Add from 'material-ui-icons/AddCircleOutline'
 import Remove from 'material-ui-icons/RemoveCircleOutline'
 import Typography from 'material-ui/Typography'
-import { serverURL }  from '../config/api'
+
 
 const styles = theme => ({
   root: {
@@ -140,7 +140,7 @@ const LineItem = ({ classes, image, title, currentQuantity, sizes, currency, pri
   <div className = { classes.root }>
     <img
       className = { classes.image}
-      src = { serverURL(image) }
+      src = { image }
       alt = { title }
     />
     <div className = { classes.flex }>

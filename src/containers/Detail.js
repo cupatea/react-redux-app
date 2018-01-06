@@ -7,7 +7,7 @@ import  {
   updateQuantityCounter,
   updateTotalPrice
 }  from '../actions'
-import { serverURL } from '../config/api'
+import { firstImage } from '../config/api'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
 import { MuiThemeProvider } from 'material-ui/styles'
@@ -211,7 +211,7 @@ class Detail extends Component {
             <img
               className = { this.classes.image }
               alt = { this.props.product.title }
-              src = { serverURL(this.props.product.images[0].url) }
+              src = { firstImage(this.props.product.images) }
             />
           </div>
           <div className = { this.classes.details } >

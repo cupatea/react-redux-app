@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { serverURL } from '../config/api'
+import { serverURL, firstImage } from '../config/api'
 import { detailPath } from '../config/router'
 import { initProducts, initCategories } from '../actions'
 import { push } from 'react-router-redux'
@@ -64,7 +64,7 @@ class Products extends Component {
     return(
       <Product
         title = { title }
-        image = { serverURL(images[0].url) }
+        image = { firstImage(images) }
         price = { price }
         currency = { this.props.messages.currency }
       />

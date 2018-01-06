@@ -19,6 +19,7 @@ import Button from '../components/Button'
 import Typography from 'material-ui/Typography'
 import ShoppingCartIcon from 'material-ui-icons/ShoppingCart'
 import ScrollToTopOnMount from './ScrollToTopOnMount'
+import { firstImage } from '../config/api'
 
 const styles = theme => ({
   root:{
@@ -108,7 +109,7 @@ class Cart extends Component{
       lineItems.map(lineItem =>
         <LineItem
           key = { lineItem.product.id + Object.entries(lineItem.product.sizes).join("-")}
-          image = { lineItem.product.images[0].url }
+          image = { firstImage(lineItem.product.images) }
           title = { lineItem.product.title }
           currentQuantity = { lineItem.quantity }
           handleChange = { () => {} }

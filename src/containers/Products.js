@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { serverURL, firstImage } from '../config/api'
 import { detailPath } from '../config/router'
-import { initProducts, initCategories } from '../actions'
+import { initProducts, initCategories, loadMoreProducts } from '../actions'
 import { push } from 'react-router-redux'
 import { withStyles } from 'material-ui/styles'
 import Grid from 'material-ui/Grid'
@@ -11,7 +11,6 @@ import { CircularProgress } from 'material-ui/Progress'
 import Category from '../components/Category'
 import Product from '../components/Product'
 import ScrollToTopOnMount from './ScrollToTopOnMount'
-
 
 const styles = theme => ({
   root: {
@@ -23,6 +22,7 @@ const styles = theme => ({
     width: '100%',
     flexDirection: 'column',
     maxWidth: 1440,
+    alignItems: 'center'
   },
   errorMessage: {
     textAlign: 'center',
@@ -44,6 +44,21 @@ class Products extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.slug !== this.props.match.params.slug || nextProps.locale !== this.props.locale)
       this.props.onInitProducts(nextProps.locale, nextProps.match.params.slug)
+  }
+  componentDidMount(){
+    window.addEventListener("scroll", () => this.handleScroll(this.props))
+  }
+
+  handleScroll(props) {
+    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight
+    const body = document.body
+    const html = document.documentElement
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight)
+    const windowBottom = windowHeight + window.pageYOffset
+    const threshold = 300
+
+    if (props.hasMore && props.loaded && !props.updating && windowBottom >= docHeight - threshold )
+       this.props.loadMoreProducts(props.locale, props.match.params.slug, props.pagesLoaded + 1 )
   }
 
   renderCategory({ title, image, slug }, itemsCount){
@@ -98,7 +113,8 @@ class Products extends Component {
     return(
       <div className = { this.classes.container }>
         { this.renderCategory(category, count) }
-        <Grid container spacing = { 24 } children = { this.renderProductsGrid(products) } />
+        { <Grid container spacing = { 24 } children = { this.renderProductsGrid(products) } /> }
+        { this.props.updating && this.renderLoading() }
       </div>
     )
   }
@@ -108,7 +124,7 @@ class Products extends Component {
       <div className = { this.classes.root }>
         <ScrollToTopOnMount />
         { this.props.loading && this.renderLoading() }
-        { this.props.error && this.renderError() }
+        { (this.props.error || this.props.updateError) && this.renderError() }
         { this.props.loaded && this.renderContentContainer( this.props )}
       </div>
     )
@@ -126,17 +142,23 @@ const mapStateToProps = state => {
     categories: state.categories.data,
     products: state.products.products,
     category: state.products.category,
+    hasMore: state.products.hasMore,
+    pagesLoaded: state.products.pagesLoaded,
     count: state.products.count,
     loading: state.products.loading,
     loaded: state.products.loaded,
     error: state.products.error,
+    updating: state.products.updating,
+    updated: state.products.updated,
+    updateError: state.products.updateError,
     lineItems: state.cart.lineItems,
   }
 }
 const mapDispachToProps = dispatch => {
   return {
     onInitCategories: (locale) => dispatch(initCategories(locale)),
-    onInitProducts: (locale, slug) => dispatch(initProducts(locale, slug)),
+    onInitProducts: (locale, slug) => dispatch(initProducts(locale,slug)),
+    loadMoreProducts: (locale, slug, page) => dispatch(loadMoreProducts(locale, slug, page)),
     handleLocationChange: (path) => dispatch(push(path)),
   }
 }

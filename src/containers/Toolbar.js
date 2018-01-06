@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { selectLanguage, initCategories, initProducts } from '../actions'
+import { selectLanguage, initCategories } from '../actions'
 import PropTypes from 'prop-types'
 import { productsPath, cartPath, rootPath } from '../config/router'
 
@@ -191,7 +191,6 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispatch => {
   return {
     onInitCategories: (locale) => dispatch(initCategories(locale)),
-    onInitProducts: (locale) => dispatch(initProducts(locale)),
     handleLocaleChange: (locale) => dispatch(selectLanguage(locale)),
     handleLocationChange: (path) => dispatch(push(path))
   }

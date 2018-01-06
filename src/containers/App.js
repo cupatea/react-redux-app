@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { withRouter } from 'react-router'
 import { cartPath } from '../config/router'
-import { initCategories, initProducts } from '../actions'
+import { initCategories } from '../actions'
 import { productsPath } from '../config/router'
 import { withStyles } from 'material-ui/styles'
 import Toolbar from './Toolbar'
@@ -59,7 +59,7 @@ class App extends Component {
     return(
       <div>
         { this.renderToolbar() }
-        { this.props.router.location.pathname != cartPath() && this.renderTabs() }
+        { this.props.router.location.pathname !== cartPath() && this.renderTabs() }
         { this.props.error && this.renderError() }
         { this.props.children }
       </div>
@@ -78,7 +78,6 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispatch => {
   return {
     onInitCategories:  (locale) => dispatch(initCategories(locale)),
-    onInitProducts:  (locale)  => dispatch(initProducts(locale)),
     handleLocationChange:  (path) => dispatch(push(path))
   }
 }

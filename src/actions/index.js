@@ -11,7 +11,12 @@ export const initCategories = (locale) =>
 
 export const initProducts = (locale, slug) =>
   creators.initProducts(
-    api.get(productsPath(slug,locale))
+    api.get(productsPath(slug,1,locale))
+  )
+
+export const loadMoreProducts = (locale, slug, page) =>
+  creators.loadMoreProducts(
+    api.get(productsPath(slug,page,locale))
   )
 
 export const initDetail = (locale, id) =>

@@ -43,8 +43,9 @@ renderTargetButton(currentValue, action) {
         aria-owns = { this.state.isMenuOpen ? 'menu-list' : null }
         aria-haspopup = "true"
         onClick = { this.handleMenuOpen }
-        children = { [ currentValue, <ArrowDropDown/> ] }
-      />
+      >
+        { currentValue } <ArrowDropDown/>
+      </Button>
     </Target>
   )
 }
@@ -71,7 +72,7 @@ render(){
             id = "menu-list"
             children = { this.renderList(this.props.list, this.props.action)  }
           />
-        </ClickAwayListener>  
+        </ClickAwayListener>
       </Popper>
     </Manager>
   )

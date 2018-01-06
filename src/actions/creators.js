@@ -12,6 +12,10 @@ export const initProducts = (products) => ({
   type: types.FETCH_PRODUCTS,
   payload: products
 })
+export const loadMoreProducts = (products) => ({
+  type: types.LOAD_MORE_PRODUCTS,
+  payload: products
+})
 export const initDetail = (detail) => ({
   type: types.FETCH_DETAIL,
   payload: detail
